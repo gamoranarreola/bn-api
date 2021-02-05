@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "name": "Maquillaje Social"
+  },
+  {
+    "id": 2,
+    "name": "Maquillaje de Novias"
+  },
+  {
+    "id": 3,
+    "name": "Maquillaje Social con Aerografo"
+  },
+  {
+    "id": 4,
+    "name": "Maquillaje y Peinado para Festival Ninas"
+  },
+  {
+    "id": 5,
+    "name": "Maquillaje FX"
+  },
+  {
+    "id": 6,
+    "name": "Maquillaje de Caracterizacion"
+  },
+  {
+    "id": 7,
+    "name": "Maquillaje de Fantasia"
+  },
+  {
+    "id": 8,
+    "name": "Peinado Basico"
+  },
+  {
+    "id": 9,
+    "name": "Alto Peinado"
+  },
+  {
+    "id": 10,
+    "name": "Manicure"
+  },
+  {
+    "id": 11,
+    "name": "Pedicure"
+  },
+  {
+    "id": 12,
+    "name": "Aplicacion de Gel en Unas"
+  },
+  {
+    "id": 13,
+    "name": "Clases de Automaquillaje"
+  }
+]

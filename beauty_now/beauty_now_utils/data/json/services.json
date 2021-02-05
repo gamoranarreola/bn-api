@@ -1,0 +1,884 @@
+[
+  {
+    "id": 1,
+    "service_id": "MQ-SOC-DN",
+    "category_id": 1,
+    "specialty_ids": [
+      1
+    ],
+    "name": "Maquillaje Social Dia o Noche",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 510,
+    "beauty_now_price": 795,
+    "public_price": 860
+  },
+  {
+    "id": 2,
+    "service_id": "PN-BAS",
+    "category_id": 2,
+    "specialty_ids": [
+      8
+    ],
+    "name": "Peinado Basico",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "00:40",
+    "beautier_price": 200,
+    "beauty_now_price": 310,
+    "public_price": 350
+  },
+  {
+    "id": 3,
+    "service_id": "ALT-PN",
+    "category_id": 2,
+    "specialty_ids": [
+      9
+    ],
+    "name": "Alto Peinado",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 300,
+    "beauty_now_price": 465,
+    "public_price": 500
+  },
+  {
+    "id": 4,
+    "service_id": "MQ-SOC-PN-SEN",
+    "category_id": 3,
+    "specialty_ids": [
+      1,
+      8
+    ],
+    "name": "Maquillaje Social y Peinado Sencillo",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "11:00"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "11:00"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "11:00"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "11:00"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 500,
+    "beauty_now_price": 670,
+    "public_price": 730
+  },
+  {
+    "id": 5,
+    "service_id": "MQ-SOC-PN-ELA",
+    "category_id": 3,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Maquillaje Social y Peinado Elaborado",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:30",
+    "beautier_price": 695,
+    "beauty_now_price": 1070,
+    "public_price": 1150
+  },
+  {
+    "id": 6,
+    "service_id": "MQ-PN-TNS",
+    "category_id": 3,
+    "specialty_ids": [
+      1,
+      8,
+      9
+    ],
+    "name": "Maquillaje y Peinado Teens",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 510,
+    "beauty_now_price": 786,
+    "public_price": 850
+  },
+  {
+    "id": 7,
+    "service_id": "MQ-PN-NIN-FEST",
+    "category_id": 3,
+    "specialty_ids": [
+      1,
+      6,
+      8,
+      9
+    ],
+    "name": "Maquillaje y Peinado Ninas Festival",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:15",
+    "beautier_price": 485,
+    "beauty_now_price": 750,
+    "public_price": 810
+  },
+  {
+    "id": 8,
+    "service_id": "MQ-PN-XV",
+    "category_id": 4,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Maquillaje y Peinado XV",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "02:00",
+    "beautier_price": 900,
+    "beauty_now_price": 1390,
+    "public_price": 1500
+  },
+  {
+    "id": 9,
+    "service_id": "MQ-XV",
+    "category_id": 4,
+    "specialty_ids": [
+      1
+    ],
+    "name": "Maquillaje XV",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 600,
+    "beauty_now_price": 925,
+    "public_price": 1000
+  },
+  {
+    "id": 10,
+    "service_id": "PN-XV",
+    "category_id": 4,
+    "specialty_ids": [
+      9
+    ],
+    "name": "Peinado XV",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 400,
+    "beauty_now_price": 620,
+    "public_price": 670
+  },
+  {
+    "id": 11,
+    "service_id": "PRB-MQ-PN-XV",
+    "category_id": 4,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Prueba de Maquillaje y Peinado XV",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "02:00",
+    "beautier_price": 720,
+    "beauty_now_price": 1110,
+    "public_price": 1200
+  },
+  {
+    "id": 12,
+    "service_id": "PRB-MQ-PN-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Prueba de Maquillaje y Peinado Novia",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "02:00",
+    "beautier_price": 720,
+    "beauty_now_price": 1110,
+    "public_price": 1200
+  },
+  {
+    "id": 13,
+    "service_id": "PRB-MQ-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Prueba de Maquillaje Novia",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 660,
+    "beauty_now_price": 1115,
+    "public_price": 1200
+  },
+  {
+    "id": 14,
+    "service_id": "PRB-PN-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      9
+    ],
+    "name": "Prueba de Peinado Novia",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 390,
+    "beauty_now_price": 650,
+    "public_price": 700
+  },
+  {
+    "id": 15,
+    "service_id": "MQ-PN-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Maquillaje y Peinado Novia",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "02:20",
+    "beautier_price": 1200,
+    "beauty_now_price": 2180,
+    "public_price": 2360
+  },
+  {
+    "id": 16,
+    "service_id": "MQ-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      1
+    ],
+    "name": "Maquillaje Novia",
+    "includes_eyelashes": true,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:15",
+    "beautier_price": 820,
+    "beauty_now_price": 1490,
+    "public_price": 1610
+  },
+  {
+    "id": 17,
+    "service_id": "PN-NV",
+    "category_id": 5,
+    "specialty_ids": [
+      9
+    ],
+    "name": "Peinado Novia",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:15",
+    "beautier_price": 450,
+    "beauty_now_price": 820,
+    "public_price": 890
+  },
+  {
+    "id": 18,
+    "service_id": "MQ-PN-DMS-ACMP",
+    "category_id": 5,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Maquillaje y Peinado Damas y Acompanantes",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:40",
+    "beautier_price": 450,
+    "beauty_now_price": 820,
+    "public_price": 1300
+  },
+  {
+    "id": 19,
+    "service_id": "MQ-DMS-ACMP",
+    "category_id": 5,
+    "specialty_ids": [
+      1,
+      9
+    ],
+    "name": "Maquillaje Damas y Acompanantes",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "01:00",
+    "beautier_price": 450,
+    "beauty_now_price": 820,
+    "public_price": 860
+  },
+  {
+    "id": 20,
+    "service_id": "PN-DMS-ACMP",
+    "category_id": 5,
+    "specialty_ids": [
+      9
+    ],
+    "name": "Peinado Damas y Acompanantes",
+    "includes_eyelashes": false,
+    "availability": {
+      "monday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "tuesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "wednesday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "thursday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "friday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "saturday": {
+        "from": "00:00",
+        "to": "23:59"
+      },
+      "sunday": {
+        "from": "00:00",
+        "to": "23:59"
+      }
+    },
+    "duration": "00:45",
+    "beautier_price": 450,
+    "beauty_now_price": 820,
+    "public_price": 500
+  }
+]

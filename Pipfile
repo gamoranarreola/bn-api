@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
+psycopg2 = "*"
+gunicorn = "*"
+django-heroku = "*"
+dj-database-url = "*"
+djoser = "*"
+django-rest-framework-social-oauth2 = "*"
+celery = "*"
+google-api-python-client = "*"
+google-auth-httplib2 = "*"
+googlemaps = "*"
+google-auth-oauthlib = "*"
+conekta = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"

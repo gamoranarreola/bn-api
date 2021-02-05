@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Maquillaje"
+  },
+  {
+    "id": 2,
+    "name": "Peinado"
+  },
+  {
+    "id": 3,
+    "name": "Maquillaje y Peinado"
+  },
+  {
+    "id": 4,
+    "name": "XV Anos"
+  },
+  {
+    "id": 5,
+    "name": "Novias y Acompanantes"
+  },
+  {
+    "id": 6,
+    "name": "Unas"
+  },
+  {
+    "id": 7,
+    "name": "Manicure"
+  },
+  {
+    "id": 8,
+    "name": "Pedicure"
+  },
+  {
+    "id": 9,
+    "name": "Aplicacion de Gel"
+  }
+]
