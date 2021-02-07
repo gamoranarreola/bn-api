@@ -1,5 +1,5 @@
 import googlemaps
-import conekta
+# import conekta
 import json
 from django.core.mail import send_mail
 from rest_framework import status
@@ -18,9 +18,11 @@ from ..serializers.work_order_serializers import LineItemSerializer, WorkOrderSe
 from ..models.service_models import Service
 from ..serializers.service_serializers import ServiceSerializer
 
+conekta = {}
+
 @api_view(['POST'])
 #@permission_classes([IsAuthenticated])
-def sendEmail(request):
+def send_email(request):
 
     try:
         send_mail(
@@ -35,6 +37,7 @@ def sendEmail(request):
     except:
 
         return generic_internal_server_error_response()
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

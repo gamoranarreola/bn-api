@@ -19,8 +19,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
+    'beauty-now-api.herokuapp.com',
 ]
-
 
 # Application definition
 
@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'beauty_now_app',
+    'beauty_now_utils',
     'rest_framework',
     'rest_framework.authtoken',
     'oauth2_provider',
@@ -153,8 +154,9 @@ STATIC_URL = '/static/'
 
 # CORS_ORIGIN_WHITELIST
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:4200',
-    'https://localhost:4200',
+    'http://localhost:8100',
+    'https://localhost:8100',
+    'https://beauty-now-client.herokuapp.com',
 ]
 
 AUTHENTICATION_BACKENDS = (

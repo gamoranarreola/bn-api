@@ -6,7 +6,7 @@ from .views.service_views import (calendars_for_beautiers,
                                   service_by_category_id, service_by_id,
                                   service_categories, service_category_by_id)
 from .views.user_views import UserActivationView, me
-from .views.work_order_views import work_orders, get_formatted_address,payment,sendEmail
+from .views.work_order_views import work_orders, get_formatted_address, payment, send_email
 
 urlpatterns = [
     path('api/beautiers', beautiers),
@@ -20,7 +20,7 @@ urlpatterns = [
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
     path('api/work-orders/', work_orders),
     path('api/payment/', payment),
-    path('api/send-email/', sendEmail),
+    path('api/send-email/', send_email),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),
 ]
