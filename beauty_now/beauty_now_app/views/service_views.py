@@ -109,19 +109,14 @@ def calendars_for_beautiers(request):
 
 
 def get_calendar_service():
-    """
-    Gets the Google calendar service using token credentials.
 
-    Returns:
-        object -- Google calendar service.
-    """
     BASE_DIR = os.path.join(os.path.dirname(__file__), '../..')
     SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
     creds = None
 
-    if os.path.exists(BASE_DIR + '/google/token.pickle'):
-        with open(BASE_DIR + '/google/token.pickle', 'rb') as token:
+    if os.path.exists(BASE_DIR + '/beauty_now_utils/google/token.pickle'):
+        with open(BASE_DIR + '/beauty_now_utils/google/token.pickle', 'rb') as token:
             creds = pickle.load(token)
 
     if not creds or not creds.valid:
@@ -138,15 +133,7 @@ def get_calendar_service():
 
 
 def handle_calendar_params(calendar):
-    """
-    Handles response from Google's calendars.get()
 
-    Arguments:
-        calendar {dict} -- Dict with response data from Google calendar service.
-
-    Returns:
-        dict -- Formatted Google calendar data.
-    """
     return {
         'id': calendar['id'],
         'beautier_name': calendar['summary']
@@ -154,16 +141,7 @@ def handle_calendar_params(calendar):
 
 
 def handle_free_busy_data(free_busy, calendar_id):
-    """
-    Handles response from Google's freebusy().query().
 
-    Arguments:
-        free_busy {dict} -- Dict with response data from Google freebusy service.
-        calendar_id {string} -- Google calendar ID.
-
-    Returns:
-        dict -- Formatted Google freebusy data.
-    """
     return {
         'time_min': free_busy['timeMin'],
         'time_max': free_busy['timeMax'],
@@ -172,15 +150,7 @@ def handle_free_busy_data(free_busy, calendar_id):
 
 
 def handle_events_data(events):
-    """
-    Handles response from Google's event().
 
-    Arguments:
-        events {dict} -- Dict with response data from Google events service.
-
-    Returns:
-        dict -- Formatted Google events data.
-    """
     formatted_events = []
 
     for item in events['items']:
