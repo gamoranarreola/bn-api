@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from urllib3.util.url import get_host
 
 from ..models.user_models import CustomUser
 from ..serializers.user_serializers import MeSerializer
@@ -20,7 +19,7 @@ class UserActivationView(APIView):
         [type] -- [description]
     """
 
-    def get (self, request, uid, token):
+    def get(self, request, uid, token):
         """[summary]
 
         Arguments:

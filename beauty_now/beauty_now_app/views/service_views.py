@@ -90,7 +90,7 @@ def calendars_for_beautiers(request):
                 'timeMin': request.data['timeMin'],
                 'timeMax': request.data['timeMax'],
                 'items': [
-                    { 'id': id }
+                    {'id': id}
                 ],
                 'timeZone': 'America/Los_Angeles'
             }
