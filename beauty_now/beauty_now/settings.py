@@ -212,3 +212,5 @@ DJOSER = {
         'user_create': 'beauty_now_app.serializers.user_serializers.UserCreateSerializer'
     },
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
