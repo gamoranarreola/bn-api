@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from ..models.user_models import CustomUser
 from ..serializers.user_serializers import MeSerializer
-from beauty_now_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
+from bn_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
 
 
 class UserActivationView(APIView):

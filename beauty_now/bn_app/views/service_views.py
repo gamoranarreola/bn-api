@@ -13,7 +13,7 @@ from ..models.service_models import Service, ServiceCategory
 from ..models.customer_profile_models import CustomerProfile, CustomerProfileAddress
 from ..serializers.service_serializers import ServiceCategorySerializer, ServiceSerializer
 from ..serializers.user_serializers import CustomerProfileAddressSerializer
-from beauty_now_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
+from bn_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
 
 
 @api_view(['GET'])
@@ -115,15 +115,15 @@ def get_calendar_service():
 
     creds = None
 
-    if os.path.exists(BASE_DIR + '/beauty_now_utils/google/token.pickle'):
-        with open(BASE_DIR + '/beauty_now_utils/google/token.pickle', 'rb') as token:
+    if os.path.exists(BASE_DIR + '/bn_utils/google/token.pickle'):
+        with open(BASE_DIR + '/bn_utils/google/token.pickle', 'rb') as token:
             creds = pickle.load(token)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(BASE_DIR + '/beauty_now_app/google/credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(BASE_DIR + '/bn_app/google/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
         with open('token.pickle', 'wb') as token:

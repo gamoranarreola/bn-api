@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath beauty_now beauty_now.wsgi
+web: gunicorn --pythonpath  bn_core.wsgi

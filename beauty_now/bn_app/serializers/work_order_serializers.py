@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from beauty_now_app.serializers.beautier_serializers import BeautierProfileSerializer
-from beauty_now_app.serializers.service_serializers import ServiceSerializer
+from bn_app.serializers.beautier_serializers import BeautierProfileSerializer
+from bn_app.serializers.service_serializers import ServiceSerializer
 
 from ..models.work_order_models import LineItem, WorkOrder
 
@@ -28,7 +28,7 @@ class LineItemSerializer(serializers.ModelSerializer):
             'beautier_profile',
         ]
 
-       
+
 class WorkOrderSerializer(serializers.ModelSerializer):
     """
     Work order serializer.
@@ -59,5 +59,5 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 
         for line_item in line_items_data:
             LineItem.objects.create(work_order=work_order, **line_item)
-            
+
         return work_order

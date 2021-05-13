@@ -7,8 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from beauty_now.tasks import handle_initial_work_order_request
-from beauty_now_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
+from bn_core.tasks import handle_initial_work_order_request
+from bn_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
 from ..models.beautier_models import BeautierProfile
 from ..models.customer_profile_models import CustomerProfile, CustomerProfileAddress
 from ..models.user_models import CustomUser

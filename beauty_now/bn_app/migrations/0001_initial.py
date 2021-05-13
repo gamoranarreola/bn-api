@@ -108,7 +108,7 @@ class Migration(migrations.Migration):
                 ('notes', models.CharField(blank=True, max_length=256)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('customer_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.customerprofile')),
+                ('customer_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.customerprofile')),
             ],
         ),
         migrations.CreateModel(
@@ -117,19 +117,19 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.service')),
-                ('specialty', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.specialty')),
+                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.service')),
+                ('specialty', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.specialty')),
             ],
         ),
         migrations.AddField(
             model_name='service',
             name='category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.servicecategory'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.servicecategory'),
         ),
         migrations.AddField(
             model_name='service',
             name='specialties',
-            field=models.ManyToManyField(through='beauty_now_app.ServiceSpecialty', to='beauty_now_app.Specialty'),
+            field=models.ManyToManyField(through='bn_app.ServiceSpecialty', to='bn_app.Specialty'),
         ),
         migrations.CreateModel(
             name='LineItem',
@@ -142,9 +142,9 @@ class Migration(migrations.Migration):
                 ('status', models.CharField(default='initial_request', max_length=32)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('beautier_profile', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.beautierprofile')),
-                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.service')),
-                ('work_order', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='line_items', to='beauty_now_app.workorder')),
+                ('beautier_profile', models.ForeignKey(default=None, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.beautierprofile')),
+                ('service', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.service')),
+                ('work_order', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='line_items', to='bn_app.workorder')),
             ],
         ),
         migrations.CreateModel(
@@ -154,7 +154,7 @@ class Migration(migrations.Migration):
                 ('place_id', models.CharField(max_length=128)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('customer_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.customerprofile')),
+                ('customer_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.customerprofile')),
             ],
         ),
         migrations.CreateModel(
@@ -163,8 +163,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('beautier_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.beautierprofile')),
-                ('specialty', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='beauty_now_app.specialty')),
+                ('beautier_profile', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.beautierprofile')),
+                ('specialty', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='bn_app.specialty')),
             ],
             options={
                 'verbose_name_plural': 'Beautier Specialties',
@@ -173,6 +173,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='beautierprofile',
             name='specialties',
-            field=models.ManyToManyField(through='beauty_now_app.BeautierProfileSpecialty', to='beauty_now_app.Specialty'),
+            field=models.ManyToManyField(through='bn_app.BeautierProfileSpecialty', to='bn_app.Specialty'),
         ),
     ]

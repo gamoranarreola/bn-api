@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 
 from ..models.beautier_models import BeautierProfile
 from ..serializers.beautier_serializers import BeautierProfileSerializer
-from beauty_now_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
+from bn_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
 
 
 @api_view(['GET'])

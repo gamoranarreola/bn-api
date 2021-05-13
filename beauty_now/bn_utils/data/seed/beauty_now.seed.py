@@ -6,10 +6,10 @@ from django.contrib.auth.hashers import make_password
 
 def seed_custom_users(apps, schema_editor):
 
-    custom_user_model = apps.get_model('beauty_now_app', 'CustomUser')
-    customer_profile_model = apps.get_model('beauty_now_app', 'CustomerProfile')
+    custom_user_model = apps.get_model('bn_app', 'CustomUser')
+    customer_profile_model = apps.get_model('bn_app', 'CustomerProfile')
 
-    custom_users_json = json.loads(open('beauty_now_utils/data/json/users.json').read())
+    custom_users_json = json.loads(open('bn_utils/data/json/users.json').read())
 
     for custom_user in custom_users_json:
 
@@ -37,9 +37,9 @@ def seed_custom_users(apps, schema_editor):
 
 def seed_beautiers(apps, schema_editor):
 
-    custom_user_model = apps.get_model('beauty_now_app', 'CustomUser')
-    beautier_profile_model = apps.get_model('beauty_now_app', 'BeautierProfile')
-    beautiers_json = json.loads(open('beauty_now_utils/data/json/beautiers.json').read())
+    custom_user_model = apps.get_model('bn_app', 'CustomUser')
+    beautier_profile_model = apps.get_model('bn_app', 'BeautierProfile')
+    beautiers_json = json.loads(open('bn_utils/data/json/beautiers.json').read())
 
     for beautier_profile in beautiers_json:
 
@@ -55,8 +55,8 @@ def seed_beautiers(apps, schema_editor):
 
 def seed_beautier_profile_specialties(apps, schema_editor):
 
-    beautier_profile_model = apps.get_model('beauty_now_app', 'BeautierProfile')
-    beautier_profile_specialty_model = apps.get_model('beauty_now_app', 'BeautierProfileSpecialty')
+    beautier_profile_model = apps.get_model('bn_app', 'BeautierProfile')
+    beautier_profile_specialty_model = apps.get_model('bn_app', 'BeautierProfileSpecialty')
 
     # Iterate through beautier accounts
     for beautier_profile in beautier_profile_model.objects.all():
@@ -87,8 +87,8 @@ def seed_beautier_profile_specialties(apps, schema_editor):
 
 def seed_service_categories(apps, schema_editor):
 
-    service_category_model = apps.get_model('beauty_now_app', 'ServiceCategory')
-    service_categories_json = json.loads(open('beauty_now_utils/data/json/service-categories.json').read())
+    service_category_model = apps.get_model('bn_app', 'ServiceCategory')
+    service_categories_json = json.loads(open('bn_utils/data/json/service-categories.json').read())
 
     for item in service_categories_json:
 
@@ -103,8 +103,8 @@ def seed_service_categories(apps, schema_editor):
 
 def seed_specialties(apps, schema_editor):
 
-    specialty_model = apps.get_model('beauty_now_app', 'Specialty')
-    specialties_json = json.loads(open('beauty_now_utils/data/json/specialties.json').read())
+    specialty_model = apps.get_model('bn_app', 'Specialty')
+    specialties_json = json.loads(open('bn_utils/data/json/specialties.json').read())
 
     for item in specialties_json:
 
@@ -119,11 +119,11 @@ def seed_specialties(apps, schema_editor):
 
 def seed_services(apps, schema_editor):
 
-    service_model = apps.get_model('beauty_now_app', 'Service')
-    services_json = json.loads(open('beauty_now_utils/data/json/services.json').read())
+    service_model = apps.get_model('bn_app', 'Service')
+    services_json = json.loads(open('bn_utils/data/json/services.json').read())
 
-    service_category_model = apps.get_model('beauty_now_app', 'ServiceCategory')
-    service_specialty_model = apps.get_model('beauty_now_app', 'ServiceSpecialty')
+    service_category_model = apps.get_model('bn_app', 'ServiceCategory')
+    service_specialty_model = apps.get_model('bn_app', 'ServiceSpecialty')
 
     for item in services_json:
 
@@ -159,7 +159,7 @@ class Migration(migrations.Migration):
     Custom migrations
     """
     dependencies = [
-        ('beauty_now_app', '0001_initial'),
+        ('bn_app', '0001_initial'),
     ]
 
     operations = [

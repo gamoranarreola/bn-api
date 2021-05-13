@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS oauth2_provider_grant CASCADE;
 DROP TABLE IF EXISTS oauth2_provider_refreshtoken CASCADE;
 DROP TABLE IF EXISTS oauth2_provider_idtoken CASCADE;
 
-DROP TABLE IF EXISTS beauty_now_app_service CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_servicecategory CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_servicespecialty CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_specialty CASCADE;
+DROP TABLE IF EXISTS bn_app_service CASCADE;
+DROP TABLE IF EXISTS bn_app_servicecategory CASCADE;
+DROP TABLE IF EXISTS bn_app_servicespecialty CASCADE;
+DROP TABLE IF EXISTS bn_app_specialty CASCADE;
 
 DROP TABLE IF EXISTS social_auth_association CASCADE;
 DROP TABLE IF EXISTS social_auth_code CASCADE;
@@ -35,15 +35,15 @@ DROP TABLE IF EXISTS social_auth_nonce CASCADE;
 DROP TABLE IF EXISTS social_auth_partial CASCADE;
 DROP TABLE IF EXISTS social_auth_usersocialauth CASCADE;
 
-DROP TABLE IF EXISTS beauty_now_app_customuser CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_customuser_groups CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_customuser_user_permissions CASCADE;
+DROP TABLE IF EXISTS bn_app_customuser CASCADE;
+DROP TABLE IF EXISTS bn_app_customuser_groups CASCADE;
+DROP TABLE IF EXISTS bn_app_customuser_user_permissions CASCADE;
 
-DROP TABLE IF EXISTS beauty_now_app_lineitem CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_workorder CASCADE;
+DROP TABLE IF EXISTS bn_app_lineitem CASCADE;
+DROP TABLE IF EXISTS bn_app_workorder CASCADE;
 
-DROP TABLE IF EXISTS beauty_now_app_beautierprofile CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_beautierprofilespecialty CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_customeraddress CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_customerprofile CASCADE;
-DROP TABLE IF EXISTS beauty_now_app_customerprofileaddress CASCADE;
+DROP TABLE IF EXISTS bn_app_beautierprofile CASCADE;
+DROP TABLE IF EXISTS bn_app_beautierprofilespecialty CASCADE;
+DROP TABLE IF EXISTS bn_app_customeraddress CASCADE;
+DROP TABLE IF EXISTS bn_app_customerprofile CASCADE;
+DROP TABLE IF EXISTS bn_app_customerprofileaddress CASCADE;

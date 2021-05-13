@@ -5,13 +5,13 @@ import os
 from celery import Celery
 from django.contrib.admin import autodiscover
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'beauty_now.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bn_core.settings')
 
 app = Celery(
     'beauty_now',
     broker='pyamqp://',
     backend='rpc://',
-    include=['beauty_now.tasks']
+    include=['bn_core.tasks']
 )
 
 app.config_from_object('django.conf:settings', namespace='CELERY')

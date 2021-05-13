@@ -31,8 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'beauty_now_app',
-    'beauty_now_utils',
+    'bn_app',
+    'bn_utils',
     'rest_framework',
     'rest_framework.authtoken',
     'oauth2_provider',
@@ -46,7 +46,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'beauty_now_app/html')
+            os.path.join(BASE_DIR, 'bn_app/html')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -96,9 +96,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
-ROOT_URLCONF = 'beauty_now.urls'
+ROOT_URLCONF = 'bn_core.urls'
 
-WSGI_APPLICATION = 'beauty_now.wsgi.application'
+WSGI_APPLICATION = 'bn_core.wsgi.application'
 
 
 # DATABASES
@@ -171,7 +171,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'beauty_now_app.CustomUser'
+AUTH_USER_MODEL = 'bn_app.CustomUser'
 
 # FACEBOOK
 SOCIAL_AUTH_FACEBOOK_KEY = '435891111073407'
@@ -209,7 +209,7 @@ DJOSER = {
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'SERIALIZERS': {
-        'user_create': 'beauty_now_app.serializers.user_serializers.UserCreateSerializer'
+        'user_create': 'bn_app.serializers.user_serializers.UserCreateSerializer'
     },
 }
 

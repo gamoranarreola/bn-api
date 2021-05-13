@@ -7,8 +7,8 @@ import locale
 from django.core.mail import send_mail
 from django.template.loader import get_template
 
-from beauty_now_app.models.user_models import CustomUser
-from beauty_now_app.models.service_models import Service
+from bn_app.models.user_models import CustomUser
+from bn_app.models.service_models import Service
 
 from .celery import app
 from .settings import EMAIL_HOST_USER
