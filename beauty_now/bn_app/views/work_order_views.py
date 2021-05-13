@@ -1,22 +1,15 @@
 import googlemaps
-# import conekta
-import json
+import conekta
 from django.core.mail import send_mail
-from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
 from bn_core.tasks import handle_initial_work_order_request
 from bn_utils.responses.generic_responses import generic_data_response, generic_internal_server_error_response
-from ..models.beautier_models import BeautierProfile
 from ..models.customer_profile_models import CustomerProfile, CustomerProfileAddress
-from ..models.user_models import CustomUser
 from ..models.work_order_models import WorkOrder
 from ..serializers.user_serializers import CustomerProfileAddressSerializer
-from ..serializers.work_order_serializers import LineItemSerializer, WorkOrderSerializer
-from ..models.service_models import Service
-from ..serializers.service_serializers import ServiceSerializer
+from ..serializers.work_order_serializers import WorkOrderSerializer
 
 conekta = {}
 
