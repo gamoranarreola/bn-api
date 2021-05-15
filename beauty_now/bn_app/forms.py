@@ -1,15 +1,10 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from ..models import CustomUser
+from beauty_now.bn_app.models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
-    """
-    Custom user creation form.
-    
-    Arguments:
-        UserCreationForm {class} -- UserCreationForm class.
-    """
+
     class Meta(UserCreationForm):
         model = CustomUser
 
@@ -21,12 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
-    """
-    Custom user change form.
-    
-    Arguments:
-        UserChangeForm {class} -- UserChangeForm class.
-    """
+
     class Meta:
         model = CustomUser
 

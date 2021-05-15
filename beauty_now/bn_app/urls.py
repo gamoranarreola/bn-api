@@ -1,12 +1,21 @@
 from django.urls import path
 
-from .views.beautier_views import (beautier_by_id, beautiers,
-                                   beautiers_for_specialties)
-from .views.service_views import (calendars_for_beautiers,
-                                  service_by_category_id, service_by_id,
-                                  service_categories, service_category_by_id)
-from .views.user_views import UserActivationView, me
-from .views.work_order_views import work_orders, get_formatted_address, payment, send_email
+from beauty_now.bn_app.views import (
+    beautiers,
+    beautier_by_id,
+    beautiers_for_specialties,
+    calendars_for_beautiers,
+    service_by_id,
+    service_by_category_id,
+    service_categories,
+    service_category_by_id,
+    UserActivationView,
+    me,
+    work_orders,
+    handle_payment,
+    send_email,
+    get_formatted_address
+)
 
 urlpatterns = [
     path('api/beautiers', beautiers),
@@ -19,7 +28,7 @@ urlpatterns = [
     path('api/service-categories/<int:pk>', service_category_by_id),
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
     path('api/work-orders/', work_orders),
-    path('api/payment/', payment),
+    path('api/payment/', handle_payment),
     path('api/send-email/', send_email),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),

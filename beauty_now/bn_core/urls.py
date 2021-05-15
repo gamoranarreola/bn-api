@@ -13,5 +13,5 @@ urlpatterns = [
     path('api/auth-token/', include('djoser.urls.jwt')),
 
     # Modules
-    path('', include('bn_app.urls'))
+    path('', include('bn_app.urls')),
 ]

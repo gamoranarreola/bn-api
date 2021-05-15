@@ -209,7 +209,7 @@ DJOSER = {
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
     'SERIALIZERS': {
-        'user_create': 'bn_app.serializers.user_serializers.UserCreateSerializer'
+        'user_create': 'bn_app.serializers.UserCreateSerializer'
     },
 }
 

@@ -1,17 +1,12 @@
-from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib import admin
 
-from ..forms import CustomUserCreationForm, CustomUserChangeForm
-from ..models import CustomUser
+from beauty_now.bn_app.models import BeautierProfile, BeautierProfileSpecialty, CustomUser, CustomerProfile
+from beauty_now.bn_app.forms import CustomUserCreationForm, CustomUserChangeForm
 
 
 class CustomUserAdmin(UserAdmin):
-    """
-    Custom user admin.
-    
-    Arguments:
-        UserAdmin {class} -- UserAdmin class.
-    """
+
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
@@ -75,4 +70,38 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
+
+class CustomerProfileAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'custom_user',
+        'customer_profile_id'
+    )
+
+    readonly_fields = (
+        'custom_user',
+        'customer_profile_id',
+    )
+
+
+class BeautierSpecialtyInline(admin.TabularInline):
+
+    model = BeautierProfileSpecialty
+
+
+class BeautierProfileAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'custom_user',
+        'calendar_id',
+    )
+
+    inlines = [
+        BeautierSpecialtyInline,
+    ]
+
+    readonly_fields = ('custom_user',)
+
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(CustomerProfile, CustomerProfileAdmin)
+admin.site.register(BeautierProfile, BeautierProfileAdmin)

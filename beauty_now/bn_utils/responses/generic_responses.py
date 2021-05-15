@@ -9,11 +9,12 @@ def generic_data_response(data):
         'status': HTTP_200_OK
     })
 
-def generic_internal_server_error_response():
+def generic_internal_server_error_response(err):
 
     return Response({
         'data': {
-            'message': 'Ha ocurrido un error en el servidor.'
+            'message': 'Ha ocurrido un error en el servidor.',
+            'error': f'{err}'
         },
         'status': HTTP_500_INTERNAL_SERVER_ERROR
     })

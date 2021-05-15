@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class BeautyNowAppConfig(AppConfig):
-    name = 'bn_app'
+    name = 'beauty_now.bn_app'
