@@ -1,6 +1,6 @@
 from django.urls import path
 
-from beauty_now.bn_app.views import (
+from .views import (
     beautiers,
     beautier_by_id,
     beautiers_for_specialties,

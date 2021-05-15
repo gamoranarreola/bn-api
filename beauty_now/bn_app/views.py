@@ -1,3 +1,4 @@
+from django.db.models.query import RawQuerySet
 from requests.api import post
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -11,10 +12,10 @@ conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
 conekta.locale = 'es'
 conekta.api_version = "2.5.1"
 
-from beauty_now.bn_utils.google.google import *
+from bn_utils.google.google import *
 
-from beauty_now.bn_app.models import (
-    CustomUser,
+from .models import (
+    AuthUser,
     BeautierProfile,
     Service,
     ServiceCategory,
@@ -23,7 +24,8 @@ from beauty_now.bn_app.models import (
     WorkOrder
 )
 
-from beauty_now.bn_app.serializers import (
+from .serializers import (
+    LineItemSerializer,
     MeSerializer,
     BeautierProfileSerializer,
     ServiceSerializer,
@@ -32,12 +34,12 @@ from beauty_now.bn_app.serializers import (
     CustomerProfileAddressSerializer
 )
 
-from beauty_now.bn_utils.responses.generic_responses import (
+from bn_utils.responses.generic_responses import (
     generic_data_response,
     generic_internal_server_error_response
 )
 
-from beauty_now.bn_core.tasks import handle_initial_work_order_request
+from bn_core.tasks import handle_initial_work_order_request
 
 
 class UserActivationView(APIView):
@@ -59,8 +61,8 @@ def me(request):
 
     try:
 
-        custom_user = CustomUser.objects.get(pk=request.user.id)
-        serializer = MeSerializer(custom_user, many=False)
+        auth_user = AuthUser.objects.get(pk=request.user.id)
+        serializer = MeSerializer(auth_user, many=False)
 
         return generic_data_response(serializer.data)
 
@@ -205,42 +207,6 @@ def send_email(request):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
-def create_work_order_instance(work_order_data, custom_user_id):
-
-    data = {
-        'request_date': work_order_data.get('request_date'),
-        'request_time': work_order_data.get('request_time'),
-        'customer_profile': CustomerProfile.objects.get(custom_user=custom_user_id).id,
-        'place_id': work_order_data.get('place_id'),
-        'notes': work_order_data.get('notes'),
-        'line_items': work_order_data.get('line_items'),
-        'status': work_order_data.get('status')
-    }
-
-    work_order_serializer = WorkOrderSerializer(data=data)
-
-    if work_order_serializer.is_valid():
-
-        work_order_instance = work_order_serializer.save()
-
-        return {
-            'instance': work_order_instance,
-            'serializer': work_order_serializer
-        }
-
-def create_customer_profile_address(place_id, custom_user_id):
-
-    if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(custom_user=custom_user_id)).filter(place_id=place_id).exists():
-
-        customer_profile_address_serializer = CustomerProfileAddressSerializer(data={
-            'customer_profile': CustomerProfile.objects.get(custom_user=custom_user_id).id,
-            'place_id': place_id
-        })
-
-        if customer_profile_address_serializer.is_valid():
-
-            customer_profile_address_serializer.save()
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def handle_payment(request):
@@ -248,7 +214,6 @@ def handle_payment(request):
     try:
 
         work_order = request.data.get('work_order')
-        total_price = 0
 
         customer = conekta.Customer.create({
             'name': request.data.get('customer')['name'],
@@ -286,10 +251,44 @@ def handle_payment(request):
         })
 
         if order.payment_status == 'paid':
-            work_order = create_work_order_instance(request.data.get('work_order'), request.user.id)
 
-            if work_order.get('instance') and work_order.get('serializer'):
-                create_customer_profile_address(work_order['place_id'], request.user.id)
+            work_order_serializer = WorkOrderSerializer(data={
+                'request_date': request.data.get('work_order')['request_date'],
+                'request_time': request.data.get('work_order')['request_time'],
+                'place_id': request.data.get('work_order')['place_id'],
+                'customer_profile': CustomerProfile.objects.get(auth_user=AuthUser.objects.get(pk=request.user.id)).id,
+                'notes': request.data.get('work_order')['notes'],
+                'status': request.data.get('work_order')['status'],
+            })
+
+            if work_order_serializer.is_valid():
+
+                work_order_instance = work_order_serializer.save()
+
+                for line_item in request.data.get('work_order')['line_items']:
+
+                    line_item_serializer = LineItemSerializer(data={
+                        'service': Service.objects.get(pk=line_item.get('service')['id']).id,
+                        'service_date': line_item['service_date'],
+                        'service_time': line_item['service_time'],
+                        'quantity': line_item['quantity'],
+                        'price': line_item['price'],
+                    })
+
+                    if line_item_serializer.is_valid():
+
+                        line_item_instance = line_item_serializer.save()
+                        work_order_instance.line_items.add(line_item_instance)
+
+                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id)).filter(place_id=request.data.get('work_order')['place_id']).exists():
+
+                    customer_profile_address_serializer = CustomerProfileAddressSerializer(data={
+                        'customer_profile': CustomerProfile.objects.get(auth_user=request.user.id).id,
+                        'place_id': request.data.get('work_order')['place_id']
+                    })
+
+                    if customer_profile_address_serializer.is_valid():
+                        customer_profile_address_serializer.save()
 
             return generic_data_response({
                 'payment_status': order.payment_status,
@@ -311,7 +310,7 @@ def work_orders(request):
 
         if request.method == 'GET':
 
-            work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(custom_user=request.user.id))
+            work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
             serializer = WorkOrderSerializer(work_orders, many=True)
 
             return generic_data_response(serializer.data)

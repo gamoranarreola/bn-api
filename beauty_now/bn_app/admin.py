@@ -1,15 +1,15 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 
-from beauty_now.bn_app.models import BeautierProfile, BeautierProfileSpecialty, CustomUser, CustomerProfile
-from beauty_now.bn_app.forms import CustomUserCreationForm, CustomUserChangeForm
+from .models import BeautierProfile, BeautierProfileSpecialty, AuthUser, CustomerProfile
+from .forms import AuthUserCreationForm, AuthUserChangeForm
 
 
-class CustomUserAdmin(UserAdmin):
+class AuthUserAdmin(UserAdmin):
 
-    add_form = CustomUserCreationForm
-    form = CustomUserChangeForm
-    model = CustomUser
+    add_form = AuthUserCreationForm
+    form = AuthUserChangeForm
+    model = AuthUser
 
     list_display = (
         'email',
@@ -74,12 +74,12 @@ class CustomUserAdmin(UserAdmin):
 class CustomerProfileAdmin(admin.ModelAdmin):
 
     list_display = (
-        'custom_user',
+        'auth_user',
         'customer_profile_id'
     )
 
     readonly_fields = (
-        'custom_user',
+        'auth_user',
         'customer_profile_id',
     )
 
@@ -92,7 +92,7 @@ class BeautierSpecialtyInline(admin.TabularInline):
 class BeautierProfileAdmin(admin.ModelAdmin):
 
     list_display = (
-        'custom_user',
+        'auth_user',
         'calendar_id',
     )
 
@@ -100,8 +100,8 @@ class BeautierProfileAdmin(admin.ModelAdmin):
         BeautierSpecialtyInline,
     ]
 
-    readonly_fields = ('custom_user',)
+    readonly_fields = ('auth_user',)
 
-admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
 admin.site.register(BeautierProfile, BeautierProfileAdmin)

@@ -1,12 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from beauty_now.bn_app.models import CustomUser
+from .models import AuthUser
 
 
-class CustomUserCreationForm(UserCreationForm):
+class AuthUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
-        model = CustomUser
+        model = AuthUser
 
         fields = (
             'email',
@@ -15,10 +15,10 @@ class CustomUserCreationForm(UserCreationForm):
         )
 
 
-class CustomUserChangeForm(UserChangeForm):
+class AuthUserChangeForm(UserChangeForm):
 
     class Meta:
-        model = CustomUser
+        model = AuthUser
 
         fields = (
             'email',

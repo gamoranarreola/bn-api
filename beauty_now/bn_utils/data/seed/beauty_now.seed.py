@@ -4,32 +4,32 @@ from django.db import migrations
 from django.contrib.auth.hashers import make_password
 
 
-def seed_custom_users(apps, schema_editor):
+def seed_auth_users(apps, schema_editor):
 
-    custom_user_model = apps.get_model('bn_app', 'CustomUser')
+    auth_user_model = apps.get_model('bn_app', 'AuthUser')
     customer_profile_model = apps.get_model('bn_app', 'CustomerProfile')
 
-    custom_users_json = json.loads(open('bn_utils/data/json/users.json').read())
+    auth_users_json = json.loads(open('bn_utils/data/json/users.json').read())
 
-    for custom_user in custom_users_json:
+    for auth_user in auth_users_json:
 
-        custom_user = custom_user_model(
-            password=make_password(custom_user['password']),
-            is_superuser=custom_user['is_superuser'],
-            first_name=custom_user['first_name'],
-            last_name=custom_user['last_name'],
-            email=custom_user['email'],
-            phone=custom_user['phone'],
-            is_staff=custom_user['is_staff'],
-            is_active=custom_user['is_active']
+        auth_user = auth_user_model(
+            password=make_password(auth_user['password']),
+            is_superuser=auth_user['is_superuser'],
+            first_name=auth_user['first_name'],
+            last_name=auth_user['last_name'],
+            email=auth_user['email'],
+            phone=auth_user['phone'],
+            is_staff=auth_user['is_staff'],
+            is_active=auth_user['is_active']
         )
 
-        custom_user.save()
-        print(f'CUSTOM USER: {custom_user}\n')
+        auth_user.save()
+        print(f'CUSTOM USER: {auth_user}\n')
 
         customer_profile = customer_profile_model(
-            custom_user=custom_user_model.objects.get(pk=custom_user.id),
-            customer_profile_id=f'C{custom_user.id * 2 + 100}'
+            auth_user=auth_user_model.objects.get(pk=auth_user.id),
+            customer_profile_id=f'C{auth_user.id * 2 + 100}'
         )
 
         customer_profile.save()
@@ -37,14 +37,14 @@ def seed_custom_users(apps, schema_editor):
 
 def seed_beautiers(apps, schema_editor):
 
-    custom_user_model = apps.get_model('bn_app', 'CustomUser')
+    auth_user_model = apps.get_model('bn_app', 'AuthUser')
     beautier_profile_model = apps.get_model('bn_app', 'BeautierProfile')
     beautiers_json = json.loads(open('bn_utils/data/json/beautiers.json').read())
 
     for beautier_profile in beautiers_json:
 
         beautier_profile = beautier_profile_model(
-            custom_user=custom_user_model.objects.get(pk=beautier_profile['custom_user_id']),
+            auth_user=auth_user_model.objects.get(pk=beautier_profile['auth_user_id']),
             calendar_id=beautier_profile['calendar_id'],
             availability=beautier_profile['availability']
         )
@@ -163,7 +163,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(seed_custom_users),
+        migrations.RunPython(seed_auth_users),
         migrations.RunPython(seed_beautiers),
         migrations.RunPython(seed_beautier_profile_specialties),
         migrations.RunPython(seed_service_categories),

@@ -171,7 +171,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_USER_MODEL = 'bn_app.CustomUser'
+AUTH_USER_MODEL = 'bn_app.AuthUser'
 
 # FACEBOOK
 SOCIAL_AUTH_FACEBOOK_KEY = '435891111073407'

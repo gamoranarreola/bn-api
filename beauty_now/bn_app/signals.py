@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from beauty_now.bn_app.models import CustomUser
+from .models import AuthUser
 
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        CustomUser.objects.create(user=instance)
+        AuthUser.objects.create(user=instance)

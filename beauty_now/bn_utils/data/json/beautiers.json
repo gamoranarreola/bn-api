@@ -1,6 +1,6 @@
 [
   {
-    "custom_user_id": 4,
+    "auth_user_id": 4,
     "calendar_id": "beautynow.mx_rr299tn22ngfku6ire6atfp2mk@group.calendar.google.com",
     "availability": {
       "0": {
@@ -34,7 +34,7 @@
     }
   },
   {
-    "custom_user_id": 5,
+    "auth_user_id": 5,
     "calendar_id": "beautynow.mx_9sjmhk415r4ok71vevqmncj7fk@group.calendar.google.com",
     "availability": {
       "0": {

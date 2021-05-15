@@ -35,9 +35,9 @@ DROP TABLE IF EXISTS social_auth_nonce CASCADE;
 DROP TABLE IF EXISTS social_auth_partial CASCADE;
 DROP TABLE IF EXISTS social_auth_usersocialauth CASCADE;
 
-DROP TABLE IF EXISTS bn_app_customuser CASCADE;
-DROP TABLE IF EXISTS bn_app_customuser_groups CASCADE;
-DROP TABLE IF EXISTS bn_app_customuser_user_permissions CASCADE;
+DROP TABLE IF EXISTS bn_app_authuser CASCADE;
+DROP TABLE IF EXISTS bn_app_authuser_groups CASCADE;
+DROP TABLE IF EXISTS bn_app_authuser_user_permissions CASCADE;
 
 DROP TABLE IF EXISTS bn_app_lineitem CASCADE;
 DROP TABLE IF EXISTS bn_app_workorder CASCADE;

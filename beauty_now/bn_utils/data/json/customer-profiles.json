@@ -1,22 +1,22 @@
 [
   {
-    "custom_user_id": 1,
+    "auth_user_id": 1,
     "customer_profile_id": "C102"
   },
   {
-    "custom_user_id": 2,
+    "auth_user_id": 2,
     "customer_profile_id": "C104"
   },
   {
-    "custom_user_id": 3,
+    "auth_user_id": 3,
     "customer_profile_id": "C106"
   },
   {
-    "custom_user_id": 4,
+    "auth_user_id": 4,
     "customer_profile_id": "C108"
   },
   {
-    "custom_user_id": 5,
+    "auth_user_id": 5,
     "customer_profile_id": "C110"
   }
 ]

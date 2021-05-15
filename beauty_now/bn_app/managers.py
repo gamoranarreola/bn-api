@@ -2,11 +2,11 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 
 
-class CustomUserManager(BaseUserManager):
+class AuthUserManager(BaseUserManager):
 
     def create_user(self, email=None, password=None, **extra_fields):
 
-        from beauty_now.bn_app.models import CustomerProfile
+        from .models import CustomerProfile
 
         if email:
             email = self.normalize_email(email)
@@ -21,7 +21,7 @@ class CustomUserManager(BaseUserManager):
         user.save()
 
         customer_profile = CustomerProfile(
-            custom_user=user,
+            auth_user=user,
             customer_profile_id=f'C{user.id * 2 + 100}'
         )
 

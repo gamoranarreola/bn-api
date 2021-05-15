@@ -7,7 +7,7 @@ import locale
 from django.core.mail import send_mail
 from django.template.loader import get_template
 
-from beauty_now.bn_app.models import CustomUser, Service
+from bn_app.models import AuthUser, Service
 
 from .celery import app
 from .settings import EMAIL_HOST_USER
@@ -15,18 +15,18 @@ from .settings import EMAIL_HOST_USER
 # locale.setlocale(locale.LC_TIME, 'es_MX.UTF-8')
 
 @app.task
-def handle_initial_work_order_request(custom_user_id, work_order, formatted_address):
+def handle_initial_work_order_request(auth_user_id, work_order, formatted_address):
 
-    custom_user = CustomUser.objects.get(pk=custom_user_id)
+    auth_user = AuthUser.objects.get(pk=auth_user_id)
     service = Service.objects.get(pk=work_order.get('line_items')[0]['service_id'])
     request_date = datetime.strptime(work_order.get('request_date'), '%Y-%m-%d')
     service_date = datetime.strptime(work_order.get('service_date'), '%Y-%m-%d')
 
     context = {
-        'client_name': f'{custom_user.last_name}, {custom_user.first_name}',
+        'client_name': f'{auth_user.last_name}, {auth_user.first_name}',
         'service_address': formatted_address,
-        'email': custom_user.email,
-        'phone': custom_user.phone,
+        'email': auth_user.email,
+        'phone': auth_user.phone,
         'request_date': request_date.strftime('%A %e %B %Y'),
         'request_time': work_order.get('request_time'),
         'service_date': service_date.strftime('%A %e %B %Y'),

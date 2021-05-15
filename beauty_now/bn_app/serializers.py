@@ -1,8 +1,9 @@
+from os import read
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
 
-from beauty_now.bn_app.models import (
-    CustomUser,
+from .models import (
+    AuthUser,
     CustomerProfile,
     CustomerProfileAddress,
     BeautierProfile,
@@ -18,7 +19,7 @@ from beauty_now.bn_app.models import (
 class UserCreateSerializer(BaseUserRegistrationSerializer):
 
     class Meta:
-        model = CustomUser
+        model = AuthUser
 
         fields = [
             'first_name',
@@ -36,7 +37,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
     def create(self, validated_data):
 
-        user = CustomUser(
+        user = AuthUser(
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
             email=self.validated_data['email'],
@@ -48,7 +49,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
         user.save()
 
         profile = CustomerProfile(
-            custom_user =  user,
+            auth_user =  user,
             customer_id = f'C{user.id * 2 + 100}',
         )
 
@@ -60,7 +61,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 class MeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CustomUser
+        model = AuthUser
 
         fields = [
             'first_name',
@@ -70,10 +71,10 @@ class MeSerializer(serializers.ModelSerializer):
         ]
 
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class AuthUserSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CustomUser
+        model = AuthUser
 
         fields = [
             'first_name',
@@ -95,7 +96,7 @@ class CustomerProfileAddressSerializer(serializers.ModelSerializer):
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
 
-    custom_user = CustomUserSerializer()
+    auth_user = AuthUserSerializer()
     addresses = CustomerProfileAddressSerializer(many=True, read_only=True)
 
     class Meta:
@@ -103,7 +104,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
 
         fields = [
             'id',
-            'custom_user',
+            'auth_user',
             'customer_profile_id',
             'addresses'
         ]
@@ -135,6 +136,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     category = ServiceCategorySerializer(read_only=True)
     specialties = SpecialtySerializer(many=True, read_only=True)
+    description = serializers.CharField(allow_blank=True)
 
     class Meta:
 
@@ -168,7 +170,7 @@ class BeautierProfilesSpecialtiesSerializer(serializers.ModelSerializer):
 
 class BeautierProfileSerializer(serializers.ModelSerializer):
 
-    custom_user = CustomUserSerializer()
+    auth_user = AuthUserSerializer()
     specialties = SpecialtySerializer(many=True, read_only=True)
 
     class Meta:
@@ -176,7 +178,7 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
 
         fields = [
             'id',
-            'custom_user',
+            'auth_user',
             'calendar_id',
             'specialties',
             'availability'
@@ -184,6 +186,8 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
 
 
 class LineItemSerializer(serializers.ModelSerializer):
+
+    service = serializers.PrimaryKeyRelatedField(many=False, queryset=Service.objects.all())
 
     class Meta:
         model = LineItem
@@ -195,14 +199,14 @@ class LineItemSerializer(serializers.ModelSerializer):
             'service_time',
             'quantity',
             'price',
-            'beautier_profile',
         ]
 
 
 class WorkOrderSerializer(serializers.ModelSerializer):
 
-    line_items = LineItemSerializer(many=True)
+    line_items = LineItemSerializer(many=True, read_only=True)
     notes = serializers.CharField(allow_blank=True)
+    customer_profile = serializers.PrimaryKeyRelatedField(many=False, queryset=CustomerProfile.objects.all())
 
     class Meta:
         model = WorkOrder
@@ -218,12 +222,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             'status',
         ]
 
+    """
     def create(self, validated_data):
-
-        line_items_data = validated_data.pop('line_items')
-        work_order = WorkOrder.objects.create(**validated_data)
-
-        for line_item in line_items_data:
-            LineItem.objects.create(work_order=work_order, **line_item)
-
-        return work_order
+        print(validated_data)
+    """
