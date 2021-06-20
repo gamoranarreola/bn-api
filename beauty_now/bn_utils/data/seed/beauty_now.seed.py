@@ -55,8 +55,8 @@ def seed_beautiers(apps, schema_editor):
 
 def seed_beautier_profile_specialties(apps, schema_editor):
 
+    specialty_model = apps.get_model('bn_app', 'Specialty')
     beautier_profile_model = apps.get_model('bn_app', 'BeautierProfile')
-    beautier_profile_specialty_model = apps.get_model('bn_app', 'BeautierProfileSpecialty')
 
     # Iterate through beautier accounts
     for beautier_profile in beautier_profile_model.objects.all():
@@ -71,18 +71,15 @@ def seed_beautier_profile_specialties(apps, schema_editor):
             specialty_id = random.randrange(1, 14, 1)
 
             # Query the beautier_profile_specialty table for an entry that contains the beautier_account_id and the specialty_id.
-            query_set = beautier_profile_specialty_model.objects.filter(beautier_profile_id=beautier_profile.id).filter(specialty_id=specialty_id)
+            # query_set = beautier_profile_specialty_model.objects.filter(beautier_profile_id=beautier_profile.id).filter(specialty_id=specialty_id)
+            beautier_with_specialty = beautier_profile_model.objects.filter(specialties__id=specialty_id)
 
             # If the query returns and empty query set, insert the entr.
-            if not query_set.exists():
+            if not beautier_with_specialty:
 
-                beautier_profile_specialty = beautier_profile_specialty_model(
-                    beautier_profile_id=beautier_profile.id,
-                    specialty_id=specialty_id
-                )
-
-                beautier_profile_specialty.save()
-                print(f'BEAUTIER PROFILE SPECIALTY: {beautier_profile_specialty}\n')
+                specialty = specialty_model.objects.get(pk=specialty_id)
+                beautier_profile.specialties.add(specialty)
+                print(f'BEAUTIER PROFILE SPECIALTY: {specialty}\n')
 
 
 def seed_service_categories(apps, schema_editor):
@@ -123,7 +120,7 @@ def seed_services(apps, schema_editor):
     services_json = json.loads(open('bn_utils/data/json/services.json').read())
 
     service_category_model = apps.get_model('bn_app', 'ServiceCategory')
-    service_specialty_model = apps.get_model('bn_app', 'ServiceSpecialty')
+    specialty_model = apps.get_model('bn_app', 'Specialty')
 
     for item in services_json:
 
@@ -144,13 +141,9 @@ def seed_services(apps, schema_editor):
 
         for specialty_id in item['specialty_ids']:
 
-            service_specialty = service_specialty_model(
-                service_id=service.id,
-                specialty_id=specialty_id
-            )
-
-            service_specialty.save()
-            print(f'SERVICE SPECIALTY: {service_specialty}\n')
+            specialty = specialty_model.objects.get(pk=specialty_id)
+            service.specialties.add(specialty)
+            print(f'SERVICE SPECIALTY: {specialty}\n')
 
 
 class Migration(migrations.Migration):
@@ -165,8 +158,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(seed_auth_users),
         migrations.RunPython(seed_beautiers),
+        migrations.RunPython(seed_specialties),
         migrations.RunPython(seed_beautier_profile_specialties),
         migrations.RunPython(seed_service_categories),
-        migrations.RunPython(seed_specialties),
         migrations.RunPython(seed_services)
     ]

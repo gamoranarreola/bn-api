@@ -27,9 +27,6 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 
 
 class CustomerProfile(models.Model):
-    """
-    Customer profile, like a customer account.
-    """
 
     auth_user = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
     customer_profile_id = models.CharField(max_length=10, unique=True)
@@ -39,10 +36,9 @@ class CustomerProfile(models.Model):
     def __str__(self):
         return f'{self.__dict__}'
 
+
 class CustomerProfileAddress(models.Model):
-    """
-    CustomerProfileAddress model for storing user addresses.
-    """
+
     customer_profile = models.ForeignKey(CustomerProfile, on_delete=models.DO_NOTHING)
     place_id = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,26 +47,13 @@ class CustomerProfileAddress(models.Model):
     def __str__(self):
         return f'{self.__dict__}'
 
+
 class BeautierProfile(models.Model):
 
     auth_user = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
-    specialties = models.ManyToManyField('Specialty', through='BeautierProfileSpecialty')
+    specialties = models.ManyToManyField('Specialty')
     calendar_id = models.CharField(max_length=128, null=True)
     availability = JSONField(default=dict)
-
-
-class BeautierProfileSpecialty(models.Model):
-
-    class Meta:
-        verbose_name_plural = 'Beautier Specialties'
-
-    beautier_profile = models.ForeignKey('BeautierProfile', on_delete=models.DO_NOTHING)
-    specialty = models.ForeignKey('Specialty', on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'Beautier Profile ID: {self.beautier_profile.id} - Specialty ID: {self.specialty.id} {self.specialty.name}'
 
 
 class Specialty(models.Model):
@@ -103,7 +86,7 @@ class Service(models.Model):
 
     service_id = models.CharField(max_length=20)
     category = models.ForeignKey('ServiceCategory', on_delete=models.DO_NOTHING)
-    specialties = models.ManyToManyField('Specialty', through='ServiceSpecialty')
+    specialties = models.ManyToManyField('Specialty')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
     extras = models.CharField(max_length=512)
@@ -119,17 +102,6 @@ class Service(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
-
-class ServiceSpecialty(models.Model):
-
-    service = models.ForeignKey('Service', on_delete=models.DO_NOTHING)
-    specialty = models.ForeignKey('Specialty', on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.__dict__}'
 
 
 class LineItem(models.Model):

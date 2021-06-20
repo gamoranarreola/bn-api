@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.core.mail import send_mail
 import googlemaps
 import conekta
 
@@ -12,7 +11,12 @@ conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
 conekta.locale = 'es'
 conekta.api_version = "2.5.1"
 
-from bn_utils.google.google import *
+from bn_utils.google.google import (
+    get_calendar_service,
+    handle_calendar_params,
+    handle_free_busy_data,
+    handle_events_data
+)
 
 from .models import (
     AuthUser,
@@ -69,6 +73,7 @@ def me(request):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
+
 @api_view(['GET'])
 def beautiers(request):
 
@@ -81,6 +86,7 @@ def beautiers(request):
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
 
 @api_view(['GET'])
 def beautier_by_id(request, pk):
@@ -95,18 +101,20 @@ def beautier_by_id(request, pk):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
+
 @api_view(['POST'])
 def beautiers_for_specialties(request):
 
     try:
 
-        beautiers_for_specialties = BeautierProfile.objects.filter(beautierprofilespecialty__specialty__in=request.data['specialty_ids']).distinct()
+        beautiers_for_specialties = BeautierProfile.objects.filter(specialties__in=request.data['specialty_ids']).distinct()
         serializer = BeautierProfileSerializer(beautiers_for_specialties, many=True)
 
         return generic_data_response(serializer.data)
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
 
 @api_view(['GET'])
 def service_by_id(request, pk):
@@ -121,6 +129,7 @@ def service_by_id(request, pk):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
+
 @api_view(['GET'])
 def service_by_category_id(request, service_category_id):
 
@@ -133,6 +142,7 @@ def service_by_category_id(request, service_category_id):
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
 
 @api_view(['GET'])
 def service_categories(request):
@@ -147,6 +157,7 @@ def service_categories(request):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
+
 @api_view(['GET'])
 def service_category_by_id(request, pk):
 
@@ -159,6 +170,7 @@ def service_category_by_id(request, pk):
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
 
 @api_view(['POST'])
 def calendars_for_beautiers(request):
@@ -190,22 +202,6 @@ def calendars_for_beautiers(request):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
-@api_view(['POST'])
-#@permission_classes([IsAuthenticated])
-def send_email(request):
-
-    try:
-        send_mail(
-            'Subject here',
-            'Here is the message.',
-            'from@example.com',
-            ['to@doradoaguilusjoel@gmail.com'],
-            fail_silently=False,
-        )
-        return generic_data_response({'test':'ok'})
-
-    except Exception as err:
-        return generic_internal_server_error_response(err)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -213,6 +209,7 @@ def handle_payment(request):
 
     try:
 
+        auth_user = AuthUser.objects.get(pk=request.user.id)
         work_order = request.data.get('work_order')
 
         customer = conekta.Customer.create({
@@ -256,7 +253,7 @@ def handle_payment(request):
                 'request_date': request.data.get('work_order')['request_date'],
                 'request_time': request.data.get('work_order')['request_time'],
                 'place_id': request.data.get('work_order')['place_id'],
-                'customer_profile': CustomerProfile.objects.get(auth_user=AuthUser.objects.get(pk=request.user.id)).id,
+                'customer_profile': CustomerProfile.objects.get(auth_user=auth_user).id,
                 'notes': request.data.get('work_order')['notes'],
                 'status': request.data.get('work_order')['status'],
             })
@@ -280,10 +277,10 @@ def handle_payment(request):
                         line_item_instance = line_item_serializer.save()
                         work_order_instance.line_items.add(line_item_instance)
 
-                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id)).filter(place_id=request.data.get('work_order')['place_id']).exists():
+                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=auth_user.id)).filter(place_id=request.data.get('work_order')['place_id']).exists():
 
                     customer_profile_address_serializer = CustomerProfileAddressSerializer(data={
-                        'customer_profile': CustomerProfile.objects.get(auth_user=request.user.id).id,
+                        'customer_profile': CustomerProfile.objects.get(auth_user=auth_user).id,
                         'place_id': request.data.get('work_order')['place_id']
                     })
 
@@ -302,33 +299,21 @@ def handle_payment(request):
     except Exception as err:
         return generic_internal_server_error_response(err)
 
-@api_view(['GET', 'POST'])
+
+@api_view(http_method_names=['GET'])
 @permission_classes([IsAuthenticated])
 def work_orders(request):
 
     try:
 
-        if request.method == 'GET':
+        work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
+        serializer = WorkOrderSerializer(work_orders, many=True)
 
-            work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
-            serializer = WorkOrderSerializer(work_orders, many=True)
-
-            return generic_data_response(serializer.data)
-
-        elif request.method == 'POST':
-
-            work_order = create_work_order_instance(request.data.get('work_order'), request.user.id)
-
-            if work_order.get('instance') and work_order.get('serializer'):
-
-                create_customer_profile_address(request.data.get('work_order')['place_id'], request.user.id)
-
-            handle_initial_work_order_request.delay(request.user.id, request.data.get('work_order'), request.data.get('formatted_address'))
-
-            return generic_data_response(work_order.get('serializer').data)
+        return generic_data_response(serializer.data)
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

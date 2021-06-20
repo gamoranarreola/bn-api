@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS oauth2_provider_idtoken CASCADE;
 
 DROP TABLE IF EXISTS bn_app_service CASCADE;
 DROP TABLE IF EXISTS bn_app_servicecategory CASCADE;
-DROP TABLE IF EXISTS bn_app_servicespecialty CASCADE;
+DROP TABLE IF EXISTS bn_app_service_specialties CASCADE;
 DROP TABLE IF EXISTS bn_app_specialty CASCADE;
 
 DROP TABLE IF EXISTS social_auth_association CASCADE;
@@ -41,9 +41,10 @@ DROP TABLE IF EXISTS bn_app_authuser_user_permissions CASCADE;
 
 DROP TABLE IF EXISTS bn_app_lineitem CASCADE;
 DROP TABLE IF EXISTS bn_app_workorder CASCADE;
+DROP TABLE IF EXISTS bn_app_workorder_line_items CASCADE;
 
 DROP TABLE IF EXISTS bn_app_beautierprofile CASCADE;
-DROP TABLE IF EXISTS bn_app_beautierprofilespecialty CASCADE;
+DROP TABLE IF EXISTS bn_app_beautierprofile_specialties CASCADE;
 DROP TABLE IF EXISTS bn_app_customeraddress CASCADE;
 DROP TABLE IF EXISTS bn_app_customerprofile CASCADE;
 DROP TABLE IF EXISTS bn_app_customerprofileaddress CASCADE;

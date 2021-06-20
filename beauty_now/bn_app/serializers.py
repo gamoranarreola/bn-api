@@ -7,7 +7,6 @@ from .models import (
     CustomerProfile,
     CustomerProfileAddress,
     BeautierProfile,
-    BeautierProfileSpecialty,
     Specialty,
     ServiceCategory,
     Service,
@@ -156,18 +155,6 @@ class ServiceSerializer(serializers.ModelSerializer):
         ]
 
 
-class BeautierProfilesSpecialtiesSerializer(serializers.ModelSerializer):
-
-    specialty = SpecialtySerializer()
-
-    class Meta:
-        model = BeautierProfileSpecialty
-
-        fields = [
-            'specialty'
-        ]
-
-
 class BeautierProfileSerializer(serializers.ModelSerializer):
 
     auth_user = AuthUserSerializer()
@@ -221,8 +208,3 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             'line_items',
             'status',
         ]
-
-    """
-    def create(self, validated_data):
-        print(validated_data)
-    """
