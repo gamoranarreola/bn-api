@@ -24,4 +24,4 @@ conekta = {editable = true, git = "https://github.com/bcdevworks/conekta-python.
 [dev-packages]
 
 [requires]
-python_version = "3.8.10"
+python_version = "3.8.11"
