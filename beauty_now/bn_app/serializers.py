@@ -175,7 +175,7 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
 
 class StaffingAssigmentSerializer(serializers.ModelSerializer):
 
-    lint_item = serializers.PrimaryKeyRelatedField(many=False, queryset=LineItem.objects.all())
+    line_item = serializers.PrimaryKeyRelatedField(many=False, queryset=LineItem.objects.all())
     beautier_profiles = BeautierProfileSerializer(many=True, read_only=True)
     class Meta:
         model = StaffingAssignment

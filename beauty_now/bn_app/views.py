@@ -1,5 +1,6 @@
 from requests.api import post
 from django.db import transaction
+from django.core import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -26,7 +27,8 @@ from .models import (
     ServiceCategory,
     CustomerProfile,
     CustomerProfileAddress,
-    WorkOrder
+    WorkOrder,
+    StaffingAssignment
 )
 
 from .serializers import (
@@ -35,6 +37,7 @@ from .serializers import (
     BeautierProfileSerializer,
     ServiceSerializer,
     ServiceCategorySerializer,
+    StaffingAssigmentSerializer,
     WorkOrderSerializer,
     CustomerProfileAddressSerializer
 )
@@ -61,7 +64,7 @@ class UserActivationView(APIView):
         return Response(result.status_code)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 @permission_classes([IsAuthenticated])
 def me(request):
 
@@ -76,7 +79,7 @@ def me(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def beautiers(request):
 
     try:
@@ -90,7 +93,7 @@ def beautiers(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def beautier_by_id(request, pk):
 
     try:
@@ -104,7 +107,7 @@ def beautier_by_id(request, pk):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['POST'])
+@api_view(http_method_names=['POST'])
 def beautiers_for_specialties(request):
 
     try:
@@ -118,7 +121,7 @@ def beautiers_for_specialties(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def service_by_id(request, pk):
 
     try:
@@ -132,7 +135,7 @@ def service_by_id(request, pk):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def service_by_category_id(request, service_category_id):
 
     try:
@@ -146,7 +149,7 @@ def service_by_category_id(request, service_category_id):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def service_categories(request):
 
     try:
@@ -160,7 +163,7 @@ def service_categories(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['GET'])
+@api_view(http_method_names=['GET'])
 def service_category_by_id(request, pk):
 
     try:
@@ -174,7 +177,7 @@ def service_category_by_id(request, pk):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['POST'])
+@api_view(http_method_names=['POST'])
 def calendars_for_beautiers(request):
 
     try:
@@ -205,7 +208,7 @@ def calendars_for_beautiers(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['POST'])
+@api_view(http_method_names=['POST'])
 @permission_classes([IsAuthenticated])
 def handle_payment(request):
 
@@ -317,7 +320,6 @@ def work_orders(request):
 
         elif request.method == 'POST':
 
-            print(request.data)
             with transaction.atomic():
 
                 work_order_savepoint = transaction.savepoint()
@@ -335,6 +337,8 @@ def work_orders(request):
                 if work_order_serializer.is_valid():
 
                     work_order_instance = work_order_serializer.save()
+                    transaction.savepoint_commit(work_order_savepoint)
+                    line_items_savepoint = transaction.savepoint()
 
                     for line_item in request.data.get('line_items'):
 
@@ -346,8 +350,7 @@ def work_orders(request):
                             price=line_item['price']
                         ))
 
-                    transaction.savepoint_commit(work_order_savepoint)
-
+                    transaction.savepoint_commit(line_items_savepoint)
                     return generic_data_response(work_order_serializer.data)
 
                 return generic_bad_request()
@@ -356,7 +359,40 @@ def work_orders(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(['POST'])
+@api_view(http_method_names=['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def staffing_assignment(request):
+
+    try:
+
+        if request.method == 'GET':
+            return generic_data_response({})
+
+        elif request.method == 'POST':
+
+            with transaction.atomic():
+
+                line_items = WorkOrder.objects.get(pk=request.data.get('work_order_id')).line_items.all()
+                staffing_assignments = []
+
+                for line_item in line_items:
+
+                    for i in range(1, line_item.quantity + 1):
+
+                        staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
+                            line_item=line_item,
+                            index=i
+                        ))
+
+                        staffing_assignments.append(staffing_assignment.data)
+
+                return generic_data_response(staffing_assignments)
+
+    except Exception as err:
+        return generic_internal_server_error_response(err)
+
+
+@api_view(http_method_names=['POST'])
 @permission_classes([IsAuthenticated])
 def get_formatted_address(request):
 

@@ -40,3 +40,19 @@ def test_create_work_order(api_client_with_credentials, create_service):
     assert WorkOrder.objects.filter(pk=res.data.get('data').get('id')).exists() == True
     assert len(LineItem.objects.all()) == 2
     assert res.data.get('status') == 200
+
+
+@pytest.mark.django_db(transaction=True)
+def test_create_staffing_assignment(api_client_with_credentials, create_work_order):
+    work_order = create_work_order()
+
+    res = api_client_with_credentials.post(
+        path='/api/staffing-assignment',
+        data={
+            'work_order_id': work_order.id
+        },
+        format='json'
+    )
+
+    print(res.data.get('data'))
+    assert res.data.get('status') == 200

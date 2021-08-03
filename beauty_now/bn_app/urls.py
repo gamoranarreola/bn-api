@@ -11,6 +11,7 @@ from .views import (
     service_category_by_id,
     UserActivationView,
     me,
+    staffing_assignment,
     work_orders,
     handle_payment,
     get_formatted_address
@@ -27,6 +28,7 @@ urlpatterns = [
     path('api/service-categories/<int:pk>', service_category_by_id),
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
     path('api/work-orders', work_orders),
+    path('api/staffing-assignment', staffing_assignment),
     path('api/payment/', handle_payment),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),
