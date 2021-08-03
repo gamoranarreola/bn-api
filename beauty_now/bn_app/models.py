@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models import JSONField
+from django.db.models import JSONField, constraints
 from django.db import models
 
 from .managers import AuthUserManager
@@ -104,14 +104,15 @@ class Service(models.Model):
         return f'{self.name}'
 
 
-class LineItem(models.Model):
+class WorkOrder(models.Model):
 
-    service = models.ForeignKey('Service', on_delete=models.DO_NOTHING)
-    service_date = models.CharField(null=True, max_length=10)
-    service_time = models.CharField(null=True, max_length=8)
-    quantity = models.IntegerField()
-    price = models.IntegerField(default=0)
-    beautier_profile = models.ForeignKey('BeautierProfile', null=True, default=None, on_delete=models.DO_NOTHING)
+    request_date = models.CharField(null=True, max_length=10)
+    request_time = models.CharField(null=True, max_length=8)
+    place_id = models.CharField(max_length=128, null=True)
+    customer_profile = models.ForeignKey('CustomerProfile', on_delete=models.DO_NOTHING)
+    line_items = models.ManyToManyField('LineItem')
+    notes = models.CharField(max_length=256, blank=True)
+    status = models.CharField(max_length=32, default='initial_request')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -119,15 +120,31 @@ class LineItem(models.Model):
         return f'{self.__dict__}'
 
 
-class WorkOrder(models.Model):
+class LineItem(models.Model):
 
-    request_date = models.CharField(null=True, max_length=10)
-    request_time = models.CharField(null=True, max_length=8)
-    place_id = models.CharField(max_length=128, null=True)
-    customer_profile = models.ForeignKey('CustomerProfile', on_delete=models.DO_NOTHING)
-    line_items = models.ManyToManyField(LineItem)
-    notes = models.CharField(max_length=256, blank=True)
-    status = models.CharField(max_length=32, default='initial_request')
+    service = models.ForeignKey('Service', on_delete=models.DO_NOTHING)
+    service_date = models.CharField(null=True, max_length=10)
+    service_time = models.CharField(null=True, max_length=8)
+    quantity = models.IntegerField()
+    price = models.IntegerField(default=0)
+    staffing_assignments = models.ManyToManyField('StaffingAssignment')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class StaffingAssignment(models.Model):
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['line_item', 'index'], name='line_item_index')
+        ]
+
+    line_item = models.ForeignKey('LineItem', on_delete=models.DO_NOTHING)
+    index = models.IntegerField()
+    beautier_profiles = models.ManyToManyField('BeautierProfile')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

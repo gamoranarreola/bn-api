@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/service-categories', service_categories),
     path('api/service-categories/<int:pk>', service_category_by_id),
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
-    path('api/work-orders/', work_orders),
+    path('api/work-orders', work_orders),
     path('api/payment/', handle_payment),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),

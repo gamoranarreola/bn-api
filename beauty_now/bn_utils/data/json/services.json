@@ -215,10 +215,9 @@
     "category_id": 3,
     "specialty_ids": [
       1,
-      8,
       9
     ],
-    "name": "Maquillaje y Peinado Teens",
+    "name": "Maquillaje y Alto Peinado",
     "includes_eyelashes": false,
     "availability": {
       "monday": {
@@ -250,7 +249,7 @@
         "to": "23:59"
       }
     },
-    "duration": "01:00",
+    "duration": "02:15",
     "beautier_price": 510,
     "beauty_now_price": 786,
     "public_price": 850

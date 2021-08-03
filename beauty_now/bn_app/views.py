@@ -1,5 +1,5 @@
-from django.db.models.query import RawQuerySet
 from requests.api import post
+from django.db import transaction
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -21,6 +21,7 @@ from bn_utils.google.google import (
 from .models import (
     AuthUser,
     BeautierProfile,
+    LineItem,
     Service,
     ServiceCategory,
     CustomerProfile,
@@ -40,6 +41,7 @@ from .serializers import (
 
 from bn_utils.responses.generic_responses import (
     generic_data_response,
+    generic_bad_request,
     generic_internal_server_error_response
 )
 
@@ -300,16 +302,55 @@ def handle_payment(request):
         return generic_internal_server_error_response(err)
 
 
-@api_view(http_method_names=['GET'])
+@api_view(http_method_names=['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def work_orders(request):
 
     try:
 
-        work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
-        serializer = WorkOrderSerializer(work_orders, many=True)
+        if request.method == 'GET':
 
-        return generic_data_response(serializer.data)
+            work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
+            serializer = WorkOrderSerializer(work_orders, many=True)
+
+            return generic_data_response(serializer.data)
+
+        elif request.method == 'POST':
+
+            print(request.data)
+            with transaction.atomic():
+
+                work_order_savepoint = transaction.savepoint()
+
+                work_order_serializer = WorkOrderSerializer(data={
+                    'request_date': request.data.get('request_date'),
+                    'request_time': request.data.get('request_time'),
+                    'customer_profile': request.data.get('customer_profile_id'),
+                    'place_id': request.data.get('place_id'),
+                    'notes': request.data.get('notes'),
+                    'status': request.data.get('status'),
+                    'line_items': request.data.get('line_items')
+                })
+
+                if work_order_serializer.is_valid():
+
+                    work_order_instance = work_order_serializer.save()
+
+                    for line_item in request.data.get('line_items'):
+
+                        work_order_instance.line_items.add(LineItem.objects.create(
+                            service=Service.objects.get(pk=line_item['service']),
+                            service_date=line_item['service_date'],
+                            service_time=line_item['service_time'],
+                            quantity=line_item['quantity'],
+                            price=line_item['price']
+                        ))
+
+                    transaction.savepoint_commit(work_order_savepoint)
+
+                    return generic_data_response(work_order_serializer.data)
+
+                return generic_bad_request()
 
     except Exception as err:
         return generic_internal_server_error_response(err)

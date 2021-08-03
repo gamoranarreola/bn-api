@@ -1,0 +1,3 @@
+[run]
+omit = beauty_now/bn_app/tests/*
+branch = True

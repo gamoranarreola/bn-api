@@ -11,6 +11,7 @@ from .models import (
     ServiceCategory,
     Service,
     LineItem,
+    StaffingAssignment,
     WorkOrder
 )
 
@@ -53,7 +54,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
         )
 
         profile.save();
-
+        print('profile created')
         return user
 
 
@@ -172,10 +173,24 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
         ]
 
 
+class StaffingAssigmentSerializer(serializers.ModelSerializer):
+
+    lint_item = serializers.PrimaryKeyRelatedField(many=False, queryset=LineItem.objects.all())
+    beautier_profiles = BeautierProfileSerializer(many=True, read_only=True)
+    class Meta:
+        model = StaffingAssignment
+
+        fields = [
+            'line_item',
+            'index',
+            'beautier_profiles',
+        ]
+
+
 class LineItemSerializer(serializers.ModelSerializer):
 
     service = serializers.PrimaryKeyRelatedField(many=False, queryset=Service.objects.all())
-
+    staffing_assignments = StaffingAssigmentSerializer(many=True, read_only=True)
     class Meta:
         model = LineItem
 
@@ -186,6 +201,7 @@ class LineItemSerializer(serializers.ModelSerializer):
             'service_time',
             'quantity',
             'price',
+            'staffing_assignments',
         ]
 
 
