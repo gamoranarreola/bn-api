@@ -1,4 +1,12 @@
-from bn_app.models import CustomerProfile, AuthUser, Service, WorkOrder, LineItem
+from bn_app.models import (
+    CustomerProfile,
+    AuthUser,
+    Service,
+    WorkOrder,
+    LineItem,
+    StaffingAssignment
+)
+
 import pytest
 
 
@@ -42,7 +50,7 @@ def test_create_work_order(api_client_with_credentials, create_service):
     assert res.data.get('status') == 200
 
 
-@pytest.mark.django_db(transaction=True)
+@pytest.mark.django_db()
 def test_create_staffing_assignment(api_client_with_credentials, create_work_order):
     work_order = create_work_order()
 
@@ -54,5 +62,26 @@ def test_create_staffing_assignment(api_client_with_credentials, create_work_ord
         format='json'
     )
 
-    print(res.data.get('data'))
+    assert res.data.get('status') == 200
+
+
+@pytest.mark.django_db()
+def test_create_staffing_assignment_beautier(api_client_with_credentials, create_staffing_assignments, create_beautier):
+    staffing_assignments = create_staffing_assignments()
+    beautier = create_beautier()
+
+    res = api_client_with_credentials.post(
+        path='/api/staffing-assignment/beautier',
+        data={
+            'staffing_assignment_ids': map(lambda x : x['id'], staffing_assignments),
+            'beautier_id': beautier.id
+        },
+        format='json'
+    )
+
+    for staffing_assignment in staffing_assignments:
+
+        beautier_profiles = StaffingAssignment.objects.get(pk=staffing_assignment.get('id')).beautier_profiles.all()
+        assert beautier_profiles is not None
+
     assert res.data.get('status') == 200

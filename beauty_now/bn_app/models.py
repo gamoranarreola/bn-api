@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.db.models import JSONField, constraints
+from django.db.models import JSONField
 from django.db import models
 
 from .managers import AuthUserManager

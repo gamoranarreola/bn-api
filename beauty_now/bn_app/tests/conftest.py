@@ -1,5 +1,15 @@
-import json
-from bn_app.models import Service, ServiceCategory, WorkOrder, AuthUser, CustomerProfile, LineItem
+from bn_app.serializers import StaffingAssigmentSerializer
+
+from bn_app.models import (
+    Service,
+    ServiceCategory,
+    WorkOrder,
+    AuthUser,
+    CustomerProfile,
+    LineItem,
+    StaffingAssignment,
+    BeautierProfile)
+
 import pytest
 
 
@@ -107,3 +117,33 @@ def create_work_order(create_service):
     return make_work_order
 
 
+@pytest.fixture
+def create_staffing_assignments(create_work_order):
+    def make_staffing_assignment():
+        work_order = create_work_order()
+        staffing_assignments = []
+
+        for line_item in work_order.line_items.all():
+
+            for i in range(1, line_item.quantity + 1):
+
+                staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
+                    line_item=line_item,
+                    index=i
+                ))
+
+                staffing_assignments.append(staffing_assignment.data)
+
+        return staffing_assignments
+    return make_staffing_assignment
+
+
+@pytest.fixture
+def create_beautier():
+    def make_beautier():
+        beautier = BeautierProfile.objects.create(
+            auth_user=AuthUser.objects.get(email='test_user@test.com')
+        )
+
+        return beautier
+    return make_beautier

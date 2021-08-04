@@ -12,6 +12,7 @@ from .views import (
     UserActivationView,
     me,
     staffing_assignment,
+    staffing_assignment_beautier,
     work_orders,
     handle_payment,
     get_formatted_address
@@ -29,6 +30,7 @@ urlpatterns = [
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
     path('api/work-orders', work_orders),
     path('api/staffing-assignment', staffing_assignment),
+    path('api/staffing-assignment/beautier', staffing_assignment_beautier),
     path('api/payment/', handle_payment),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),

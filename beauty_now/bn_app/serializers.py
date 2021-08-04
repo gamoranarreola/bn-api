@@ -177,10 +177,12 @@ class StaffingAssigmentSerializer(serializers.ModelSerializer):
 
     line_item = serializers.PrimaryKeyRelatedField(many=False, queryset=LineItem.objects.all())
     beautier_profiles = BeautierProfileSerializer(many=True, read_only=True)
+
     class Meta:
         model = StaffingAssignment
 
         fields = [
+            'id',
             'line_item',
             'index',
             'beautier_profiles',
@@ -191,6 +193,7 @@ class LineItemSerializer(serializers.ModelSerializer):
 
     service = serializers.PrimaryKeyRelatedField(many=False, queryset=Service.objects.all())
     staffing_assignments = StaffingAssigmentSerializer(many=True, read_only=True)
+
     class Meta:
         model = LineItem
 

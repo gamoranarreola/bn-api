@@ -1,6 +1,5 @@
 from requests.api import post
 from django.db import transaction
-from django.core import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -370,26 +369,48 @@ def staffing_assignment(request):
 
         elif request.method == 'POST':
 
-            with transaction.atomic():
+            line_items = WorkOrder.objects.get(pk=request.data.get('work_order_id')).line_items.all()
+            staffing_assignments = []
 
-                line_items = WorkOrder.objects.get(pk=request.data.get('work_order_id')).line_items.all()
-                staffing_assignments = []
+            for line_item in line_items:
 
-                for line_item in line_items:
+                for i in range(1, line_item.quantity + 1):
 
-                    for i in range(1, line_item.quantity + 1):
+                    staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
+                        line_item=line_item,
+                        index=i
+                    ))
 
-                        staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
-                            line_item=line_item,
-                            index=i
-                        ))
+                    staffing_assignments.append(staffing_assignment.data)
 
-                        staffing_assignments.append(staffing_assignment.data)
-
-                return generic_data_response(staffing_assignments)
+            return generic_data_response(staffing_assignments)
 
     except Exception as err:
         return generic_internal_server_error_response(err)
+
+
+@api_view(http_method_names=['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def staffing_assignment_beautier(request):
+
+    try:
+
+        if request.method == 'GET':
+            return generic_data_response({})
+
+        elif request.method == 'POST':
+
+            staffing_assignments = StaffingAssignment.objects.filter(id__in=request.data.get('staffing_assignment_ids'))
+            beautier_profile = BeautierProfile.objects.get(pk=request.data.get('beautier_id'))
+
+            for staffing_assignment in staffing_assignments:
+                staffing_assignment.beautier_profiles.add(beautier_profile)
+
+            return generic_data_response({})
+
+    except Exception as err:
+        return generic_internal_server_error_response(err)
+
 
 
 @api_view(http_method_names=['POST'])
