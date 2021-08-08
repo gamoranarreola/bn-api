@@ -96,7 +96,7 @@ class CustomerProfileAddressSerializer(serializers.ModelSerializer):
 
 class CustomerProfileSerializer(serializers.ModelSerializer):
 
-    auth_user = AuthUserSerializer()
+    auth_user = AuthUserSerializer(read_only=True)
     addresses = CustomerProfileAddressSerializer(many=True, read_only=True)
 
     class Meta:
@@ -212,7 +212,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 
     line_items = LineItemSerializer(many=True, read_only=True)
     notes = serializers.CharField(allow_blank=True)
-    customer_profile = serializers.PrimaryKeyRelatedField(many=False, queryset=CustomerProfile.objects.all())
+    customer_profile = CustomerProfileSerializer()
 
     class Meta:
         model = WorkOrder

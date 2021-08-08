@@ -155,6 +155,7 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:8100',
     'https://localhost:8100',
+    'http://localhost:4200',
     'https://beauty-now-client.herokuapp.com',
 ]
 

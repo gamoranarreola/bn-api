@@ -51,4 +51,4 @@ DROP TABLE IF EXISTS bn_app_customerprofileaddress CASCADE;
 
 DROP TABLE IF EXISTS bn_app_lineitem_staffing_assignments CASCADE;
 DROP TABLE IF EXISTS bn_app_staffingassignment CASCADE;
-DROP TABLE IF EXISTS bn_app_staffingassignment_beautier_profile CASCADE;
+DROP TABLE IF EXISTS bn_app_staffingassignment_beautier_profiles CASCADE;

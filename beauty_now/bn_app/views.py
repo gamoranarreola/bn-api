@@ -1,7 +1,7 @@
 from requests.api import post
 from django.db import transaction
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import googlemaps
@@ -31,6 +31,7 @@ from .models import (
 )
 
 from .serializers import (
+    CustomerProfileSerializer,
     LineItemSerializer,
     MeSerializer,
     BeautierProfileSerializer,
@@ -326,7 +327,7 @@ def work_orders(request):
                 work_order_serializer = WorkOrderSerializer(data={
                     'request_date': request.data.get('request_date'),
                     'request_time': request.data.get('request_time'),
-                    'customer_profile': request.data.get('customer_profile_id'),
+                    'customer_profile': CustomerProfile.objects.get(auth_user=AuthUser.objects.get(pk=request.user.id)).id,
                     'place_id': request.data.get('place_id'),
                     'notes': request.data.get('notes'),
                     'status': request.data.get('status'),
@@ -342,7 +343,7 @@ def work_orders(request):
                     for line_item in request.data.get('line_items'):
 
                         work_order_instance.line_items.add(LineItem.objects.create(
-                            service=Service.objects.get(pk=line_item['service']),
+                            service=Service.objects.get(pk=line_item['service_id']),
                             service_date=line_item['service_date'],
                             service_time=line_item['service_time'],
                             quantity=line_item['quantity'],
@@ -423,6 +424,40 @@ def get_formatted_address(request):
 
         response = google_maps_client.place(request.data['place_id'])
         return generic_data_response(response['result']['formatted_address'])
+
+    except Exception as err:
+        return generic_internal_server_error_response(err)
+
+
+"""
+ADMIN ENDPOINTS
+"""
+
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def customer_profiles(request):
+
+    try:
+
+        customer_profiles = CustomerProfile.objects.all()
+        customer_profile_serializer = CustomerProfileSerializer(customer_profiles, many=True)
+
+        return generic_data_response(customer_profile_serializer.data);
+
+    except Exception as err:
+        return generic_internal_server_error_response(err)
+
+
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def admin_work_orders(request):
+
+    try:
+
+        work_orders = WorkOrder.objects.all()
+        work_orders_serializer = WorkOrderSerializer(work_orders, many=True)
+
+        return generic_data_response(work_orders_serializer.data)
 
     except Exception as err:
         return generic_internal_server_error_response(err)

@@ -1,10 +1,12 @@
 from django.urls import path
 
 from .views import (
+    admin_work_orders,
     beautiers,
     beautier_by_id,
     beautiers_for_specialties,
     calendars_for_beautiers,
+    customer_profiles,
     service_by_id,
     service_by_category_id,
     service_categories,
@@ -34,4 +36,8 @@ urlpatterns = [
     path('api/payment/', handle_payment),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),
+
+    # ADMIN
+    path('api/admin/customer-profiles', customer_profiles),
+    path('api/admin/work-orders', admin_work_orders)
 ]
