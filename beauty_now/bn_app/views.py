@@ -327,7 +327,7 @@ def work_orders(request):
                 work_order_serializer = WorkOrderSerializer(data={
                     'request_date': request.data.get('request_date'),
                     'request_time': request.data.get('request_time'),
-                    'customer_profile': CustomerProfile.objects.get(auth_user=AuthUser.objects.get(pk=request.user.id)).id,
+                    'customer_profile_id': CustomerProfile.objects.get(auth_user_id=AuthUser.objects.get(pk=request.user.id)).id,
                     'place_id': request.data.get('place_id'),
                     'notes': request.data.get('notes'),
                     'status': request.data.get('status'),

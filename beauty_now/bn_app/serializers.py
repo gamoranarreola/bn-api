@@ -212,7 +212,8 @@ class WorkOrderSerializer(serializers.ModelSerializer):
 
     line_items = LineItemSerializer(many=True, read_only=True)
     notes = serializers.CharField(allow_blank=True)
-    customer_profile = CustomerProfileSerializer()
+    customer_profile = CustomerProfileSerializer(read_only=True)
+    customer_profile_id = serializers.PrimaryKeyRelatedField(many=False, queryset=CustomerProfile.objects.all(), source='customer_profile')
 
     class Meta:
         model = WorkOrder
@@ -222,8 +223,11 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             'request_date',
             'request_time',
             'customer_profile',
+            'customer_profile_id',
             'place_id',
             'notes',
             'line_items',
             'status',
         ]
+
+        optional_fields = ['customer_profile_id']
