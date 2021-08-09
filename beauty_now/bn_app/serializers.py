@@ -191,7 +191,8 @@ class StaffingAssigmentSerializer(serializers.ModelSerializer):
 
 class LineItemSerializer(serializers.ModelSerializer):
 
-    service = serializers.PrimaryKeyRelatedField(many=False, queryset=Service.objects.all())
+    service = ServiceSerializer(read_only=True)
+    service_id = serializers.PrimaryKeyRelatedField(many=False, queryset=Service.objects.all(), source='service')
     staffing_assignments = StaffingAssigmentSerializer(many=True, read_only=True)
 
     class Meta:
@@ -200,12 +201,15 @@ class LineItemSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'service',
+            'service_id',
             'service_date',
             'service_time',
             'quantity',
             'price',
             'staffing_assignments',
         ]
+
+        optional_fields = ['service_id']
 
 
 class WorkOrderSerializer(serializers.ModelSerializer):
