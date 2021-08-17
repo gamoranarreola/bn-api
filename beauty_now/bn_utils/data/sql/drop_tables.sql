@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS oauth2_provider_idtoken CASCADE;
 DROP TABLE IF EXISTS bn_app_service CASCADE;
 DROP TABLE IF EXISTS bn_app_servicecategory CASCADE;
 DROP TABLE IF EXISTS bn_app_service_specialties CASCADE;
+DROP TABLE IF EXISTS bn_app_servicecategory_services CASCADE;
 DROP TABLE IF EXISTS bn_app_specialty CASCADE;
 
 DROP TABLE IF EXISTS social_auth_association CASCADE;

@@ -127,6 +127,7 @@ def seed_services(apps, schema_editor):
         service = service_model(
             service_id=item['service_id'],
             category=service_category_model.objects.get(pk=item['category_id']),
+            description=item['description'],
             name=item['name'],
             includes_eyelashes=item['includes_eyelashes'],
             availability=item['availability'],
@@ -138,6 +139,9 @@ def seed_services(apps, schema_editor):
 
         service.save()
         print(f'SERVICE: {service}\n')
+
+        category = service_category_model.objects.get(pk=item['category_id'])
+        category.services.add(service)
 
         for specialty_id in item['specialty_ids']:
 

@@ -75,6 +75,8 @@ class ServiceCategory(models.Model):
         verbose_name_plural = 'Service Categories'
 
     name = models.CharField(max_length=50)
+    panel = models.BooleanField(default=False)
+    services = models.ManyToManyField('Service')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -88,7 +90,7 @@ class Service(models.Model):
     category = models.ForeignKey('ServiceCategory', on_delete=models.DO_NOTHING)
     specialties = models.ManyToManyField('Specialty')
     name = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=512)
     extras = models.CharField(max_length=512)
     includes_eyelashes = models.BooleanField(default=False)
     availability = JSONField()

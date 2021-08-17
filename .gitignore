@@ -3,4 +3,3 @@
 *.session.sql
 .coverage
 /htmlcov
-/**/migrations

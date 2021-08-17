@@ -121,20 +121,9 @@ class SpecialtySerializer(serializers.ModelSerializer):
         ]
 
 
-class ServiceCategorySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ServiceCategory
-
-        fields = [
-            'id',
-            'name'
-        ]
-
-
 class ServiceSerializer(serializers.ModelSerializer):
 
-    category = ServiceCategorySerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(read_only=True)
     specialties = SpecialtySerializer(many=True, read_only=True)
     description = serializers.CharField(allow_blank=True)
 
@@ -153,6 +142,20 @@ class ServiceSerializer(serializers.ModelSerializer):
             'duration',
             'public_price',
             'specialties'
+        ]
+
+
+class ServiceCategorySerializer(serializers.ModelSerializer):
+
+    services = ServiceSerializer(many=True, read_only=True)
+    class Meta:
+        model = ServiceCategory
+
+        fields = [
+            'id',
+            'name',
+            'panel',
+            'services'
         ]
 
 
