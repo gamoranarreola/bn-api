@@ -1,4 +1,4 @@
-from bn_app.serializers import StaffingAssigmentSerializer
+from bn_app.serializers import StaffAssigmentSerializer
 
 from bn_app.models import (
     Service,
@@ -127,7 +127,7 @@ def create_staffing_assignments(create_work_order):
 
             for i in range(1, line_item.quantity + 1):
 
-                staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
+                staffing_assignment = StaffAssigmentSerializer(StaffingAssignment.objects.create(
                     line_item=line_item,
                     index=i
                 ))

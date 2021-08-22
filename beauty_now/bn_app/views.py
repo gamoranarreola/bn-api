@@ -27,7 +27,7 @@ from .models import (
     CustomerProfile,
     CustomerProfileAddress,
     WorkOrder,
-    StaffingAssignment
+    StaffAssignment
 )
 
 from .serializers import (
@@ -37,7 +37,7 @@ from .serializers import (
     BeautierProfileSerializer,
     ServiceSerializer,
     ServiceCategorySerializer,
-    StaffingAssigmentSerializer,
+    StaffAssigmentSerializer,
     WorkOrderSerializer,
     CustomerProfileAddressSerializer
 )
@@ -377,7 +377,7 @@ def staffing_assignment(request):
 
                 for i in range(1, line_item.quantity + 1):
 
-                    staffing_assignment = StaffingAssigmentSerializer(StaffingAssignment.objects.create(
+                    staffing_assignment = StaffAssigmentSerializer(StaffingAssignment.objects.create(
                         line_item=line_item,
                         index=i
                     ))

@@ -95,9 +95,9 @@ class Service(models.Model):
     includes_eyelashes = models.BooleanField(default=False)
     availability = JSONField()
     duration = models.TimeField()
-    beautier_price = models.IntegerField()
-    beauty_now_price = models.IntegerField()
-    public_price = models.IntegerField()
+    beautier_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    beauty_now_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    public_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -110,7 +110,7 @@ class WorkOrder(models.Model):
 
     request_date = models.CharField(null=True, max_length=10)
     request_time = models.CharField(null=True, max_length=8)
-    place_id = models.CharField(max_length=128, null=True)
+    place_id = models.CharField(max_length=512, null=True)
     customer_profile = models.ForeignKey('CustomerProfile', on_delete=models.DO_NOTHING)
     line_items = models.ManyToManyField('LineItem')
     notes = models.CharField(max_length=256, blank=True)
@@ -128,8 +128,8 @@ class LineItem(models.Model):
     service_date = models.CharField(null=True, max_length=10)
     service_time = models.CharField(null=True, max_length=8)
     quantity = models.IntegerField()
-    price = models.IntegerField(default=0)
-    staffing_assignments = models.ManyToManyField('StaffingAssignment')
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    staffing = models.ManyToManyField('StaffAssignment')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -137,7 +137,7 @@ class LineItem(models.Model):
         return f'{self.__dict__}'
 
 
-class StaffingAssignment(models.Model):
+class StaffAssignment(models.Model):
 
     class Meta:
         constraints = [
@@ -146,7 +146,8 @@ class StaffingAssignment(models.Model):
 
     line_item = models.ForeignKey('LineItem', on_delete=models.DO_NOTHING)
     index = models.IntegerField()
-    beautier_profiles = models.ManyToManyField('BeautierProfile')
+    auth_user = models.ManyToManyField('AuthUser')
+    total_payout = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
