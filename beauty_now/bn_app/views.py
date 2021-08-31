@@ -1,3 +1,4 @@
+import re
 from requests.api import post
 from django.db import transaction
 from rest_framework.decorators import api_view, permission_classes
@@ -6,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import googlemaps
 import conekta
+from uritemplate.api import partial
 
 conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
 conekta.locale = 'es'
@@ -21,13 +23,13 @@ from bn_utils.google.google import (
 from .models import (
     AuthUser,
     BeautierProfile,
-    LineItem,
     Service,
     ServiceCategory,
     CustomerProfile,
     CustomerProfileAddress,
-    WorkOrder,
-    StaffAssignment
+    StaffAssignment,
+    StaffLine,
+    WorkOrder
 )
 
 from .serializers import (
@@ -38,14 +40,17 @@ from .serializers import (
     ServiceSerializer,
     ServiceCategorySerializer,
     StaffAssigmentSerializer,
+    StaffLineSerializer,
     WorkOrderSerializer,
     CustomerProfileAddressSerializer
 )
 
 from bn_utils.responses.generic_responses import (
-    generic_data_response,
-    generic_bad_request,
-    generic_internal_server_error_response
+    response_200,
+    response_201,
+    response_204,
+    response_400,
+    response_500
 )
 
 from bn_core.tasks import handle_initial_work_order_request
@@ -73,10 +78,10 @@ def me(request):
         auth_user = AuthUser.objects.get(pk=request.user.id)
         serializer = MeSerializer(auth_user, many=False)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -87,10 +92,10 @@ def beautiers(request):
         beautiers = BeautierProfile.objects.all()
         serializer = BeautierProfileSerializer(beautiers, many=True)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -101,10 +106,10 @@ def beautier_by_id(request, pk):
         beautier = BeautierProfile.objects.get(pk=pk)
         serializer = BeautierProfileSerializer(beautier, many=False)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['POST'])
@@ -115,10 +120,10 @@ def beautiers_for_specialties(request):
         beautiers_for_specialties = BeautierProfile.objects.filter(specialties__in=request.data['specialty_ids']).distinct()
         serializer = BeautierProfileSerializer(beautiers_for_specialties, many=True)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -129,10 +134,10 @@ def service_by_id(request, pk):
         service = Service.objects.get(pk=pk)
         serializer = ServiceSerializer(service, many=False)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -143,10 +148,10 @@ def service_by_category_id(request, service_category_id):
         services = Service.objects.filter(category_id=service_category_id)
         serializer = ServiceSerializer(services, many=True)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -157,10 +162,10 @@ def service_categories(request):
         serviceCategories = ServiceCategory.objects.all()
         serializer = ServiceCategorySerializer(serviceCategories, many=True)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -171,10 +176,10 @@ def service_category_by_id(request, pk):
         serviceCategory = ServiceCategory.objects.get(pk=pk)
         serializer = ServiceCategorySerializer(serviceCategory, many=False)
 
-        return generic_data_response(serializer.data)
+        return response_200(serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['POST'])
@@ -202,10 +207,10 @@ def calendars_for_beautiers(request):
                 'events': handle_events_data(service.events().list(calendarId=id).execute()),
             })
 
-        return generic_data_response(calendar_data)
+        return response_200(calendar_data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['POST'])
@@ -292,7 +297,7 @@ def handle_payment(request):
                     if customer_profile_address_serializer.is_valid():
                         customer_profile_address_serializer.save()
 
-            return generic_data_response({
+            return response_200({
                 'payment_status': order.payment_status,
                 'payment_amount': f'${str((order.amount / 100))} {order.currency}',
                 'payment_method': {
@@ -302,7 +307,7 @@ def handle_payment(request):
             })
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET', 'POST'])
@@ -316,7 +321,7 @@ def work_orders(request):
             work_orders = WorkOrder.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=request.user.id))
             serializer = WorkOrderSerializer(work_orders, many=True)
 
-            return generic_data_response(serializer.data)
+            return response_200(serializer.data)
 
         elif request.method == 'POST':
 
@@ -342,76 +347,30 @@ def work_orders(request):
 
                     for line_item in request.data.get('line_items'):
 
-                        work_order_instance.line_items.add(LineItem.objects.create(
+                        line_item_instance = work_order_instance.line_items.create(
                             service=Service.objects.get(pk=line_item['service_id']),
                             service_date=line_item['service_date'],
                             service_time=line_item['service_time'],
                             quantity=line_item['quantity'],
                             price=line_item['price']
-                        ))
+                        )
+
+                        for idx in range(1, line_item['quantity'] + 1):
+
+                            staff_assignment_instance = line_item_instance.staff_assignments.create(
+                                line_item=line_item_instance,
+                                index=idx
+                            )
+
+                            staff_assignment_instance.staff_lines.create(staff_assignment=staff_assignment_instance)
 
                     transaction.savepoint_commit(line_items_savepoint)
-                    return generic_data_response(work_order_serializer.data)
+                    return response_201(work_order_serializer.data)
 
-                return generic_bad_request()
-
-    except Exception as err:
-        return generic_internal_server_error_response(err)
-
-
-@api_view(http_method_names=['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def staffing_assignment(request):
-
-    try:
-
-        if request.method == 'GET':
-            return generic_data_response({})
-
-        elif request.method == 'POST':
-
-            line_items = WorkOrder.objects.get(pk=request.data.get('work_order_id')).line_items.all()
-            staffing_assignments = []
-
-            for line_item in line_items:
-
-                for i in range(1, line_item.quantity + 1):
-
-                    staffing_assignment = StaffAssigmentSerializer(StaffingAssignment.objects.create(
-                        line_item=line_item,
-                        index=i
-                    ))
-
-                    staffing_assignments.append(staffing_assignment.data)
-
-            return generic_data_response(staffing_assignments)
+                return response_400()
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
-
-
-@api_view(http_method_names=['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def staffing_assignment_beautier(request):
-
-    try:
-
-        if request.method == 'GET':
-            return generic_data_response({})
-
-        elif request.method == 'POST':
-
-            staffing_assignments = StaffingAssignment.objects.filter(id__in=request.data.get('staffing_assignment_ids'))
-            beautier_profile = BeautierProfile.objects.get(pk=request.data.get('beautier_id'))
-
-            for staffing_assignment in staffing_assignments:
-                staffing_assignment.beautier_profiles.add(beautier_profile)
-
-            return generic_data_response({})
-
-    except Exception as err:
-        return generic_internal_server_error_response(err)
-
+        return response_500(err)
 
 
 @api_view(http_method_names=['POST'])
@@ -423,10 +382,10 @@ def get_formatted_address(request):
     try:
 
         response = google_maps_client.place(request.data['place_id'])
-        return generic_data_response(response['result']['formatted_address'])
+        return response_200(response['result']['formatted_address'])
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 """
@@ -435,17 +394,16 @@ ADMIN ENDPOINTS
 
 @api_view(http_method_names=['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
-def customer_profiles(request):
+def admin_customer_profiles(request):
 
     try:
 
-        customer_profiles = CustomerProfile.objects.all()
-        customer_profile_serializer = CustomerProfileSerializer(customer_profiles, many=True)
+        customer_profile_serializer = CustomerProfileSerializer(CustomerProfile.objects.all(), many=True)
 
-        return generic_data_response(customer_profile_serializer.data);
+        return response_200(customer_profile_serializer.data);
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
 
 
 @api_view(http_method_names=['GET'])
@@ -457,7 +415,64 @@ def admin_work_orders(request):
         work_orders = WorkOrder.objects.all()
         work_orders_serializer = WorkOrderSerializer(work_orders, many=True)
 
-        return generic_data_response(work_orders_serializer.data)
+        return response_200(work_orders_serializer.data)
 
     except Exception as err:
-        return generic_internal_server_error_response(err)
+        return response_500(err)
+
+
+@api_view(http_method_names=['POST'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def admin_staff_assignments(request):
+
+    try:
+
+        staff_assignments = StaffAssignment.objects.filter(line_item_id=request.data.get('line_item_id'))
+        serializer = StaffAssigmentSerializer(staff_assignments, many=True)
+
+        return response_200(serializer.data)
+
+
+    except Exception as err:
+        return response_500(err)
+
+
+@api_view(http_method_names=['POST', 'DELETE', 'PATCH'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def admin_staff_lines(request, pk=None):
+
+    try:
+
+        if request.method == 'POST':
+
+            staff_assignment = StaffAssignment.objects.get(pk=request.data.get('staff_assignment_id'))
+            staff_line_serializer = StaffLineSerializer(staff_assignment.staff_lines.create(staff_assignment=staff_assignment))
+
+            return response_201(staff_line_serializer.data)
+
+        elif request.method == 'DELETE':
+
+            staff_line = StaffLine.objects.get(pk=pk)
+            staff_line.delete();
+
+            return response_204({})
+
+        elif request.method == 'PATCH':
+
+            data = {}
+
+            if 'auth_user_id' in request.data:
+                data['auth_user'] = AuthUser.objects.get(pk=request.data.get('auth_user_id')).id
+
+            if 'pay_out' in request.data:
+                data['pay_out'] = request.data.get('pay_out')
+
+            staff_line_serializer = StaffLineSerializer(instance=StaffLine.objects.get(pk=pk), data=data, partial=True)
+
+            if staff_line_serializer.is_valid():
+                staff_line_serializer.save()
+
+                return response_204(staff_line_serializer.data)
+
+    except Exception as err:
+        return response_500(err)

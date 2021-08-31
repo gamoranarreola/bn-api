@@ -7,7 +7,7 @@ from bn_app.models import (
     AuthUser,
     CustomerProfile,
     LineItem,
-    StaffingAssignment,
+    StaffAssignment,
     BeautierProfile)
 
 import pytest

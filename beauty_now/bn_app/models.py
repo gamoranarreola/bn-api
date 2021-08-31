@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models import JSONField
 from django.db import models
+from django.db.models.aggregates import Max
 
 from .managers import AuthUserManager
 
@@ -129,7 +130,7 @@ class LineItem(models.Model):
     service_time = models.CharField(null=True, max_length=8)
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    staffing = models.ManyToManyField('StaffAssignment')
+    staff_assignments = models.ManyToManyField('StaffAssignment')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -144,10 +145,21 @@ class StaffAssignment(models.Model):
             models.UniqueConstraint(fields=['line_item', 'index'], name='line_item_index')
         ]
 
-    line_item = models.ForeignKey('LineItem', on_delete=models.DO_NOTHING)
+    line_item = models.ForeignKey('LineItem', on_delete=models.CASCADE)
     index = models.IntegerField()
-    auth_user = models.ManyToManyField('AuthUser')
-    total_payout = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    staff_lines = models.ManyToManyField('StaffLine')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class StaffLine(models.Model):
+
+    staff_assignment = models.ForeignKey('StaffAssignment', on_delete=models.CASCADE)
+    auth_user = models.ForeignKey('AuthUser', null=True, default=None, on_delete=models.DO_NOTHING)
+    pay_out = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

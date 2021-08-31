@@ -12,6 +12,7 @@ from .models import (
     Service,
     LineItem,
     StaffAssignment,
+    StaffLine,
     WorkOrder
 )
 
@@ -77,6 +78,7 @@ class AuthUserSerializer(serializers.ModelSerializer):
         model = AuthUser
 
         fields = [
+            'id',
             'first_name',
             'last_name'
         ]
@@ -148,6 +150,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 class ServiceCategorySerializer(serializers.ModelSerializer):
 
     services = ServiceSerializer(many=True, read_only=True)
+
     class Meta:
         model = ServiceCategory
 
@@ -176,10 +179,25 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
         ]
 
 
+class StaffLineSerializer(serializers.ModelSerializer):
+
+    staff_assignment = serializers.PrimaryKeyRelatedField(read_only=False, queryset=StaffAssignment.objects.all())
+    auth_user = serializers.PrimaryKeyRelatedField(queryset=AuthUser.objects.all())
+
+    class Meta:
+        model = StaffLine
+
+        fields = [
+            'id',
+            'auth_user',
+            'pay_out',
+            'staff_assignment'
+        ]
+
 class StaffAssigmentSerializer(serializers.ModelSerializer):
 
     line_item = serializers.PrimaryKeyRelatedField(many=False, queryset=LineItem.objects.all())
-    beautier_profiles = BeautierProfileSerializer(many=True, read_only=True)
+    staff_lines = StaffLineSerializer(many=True, read_only=True)
 
     class Meta:
         model = StaffAssignment
@@ -188,7 +206,7 @@ class StaffAssigmentSerializer(serializers.ModelSerializer):
             'id',
             'line_item',
             'index',
-            'beautier_profiles',
+            'staff_lines'
         ]
 
 

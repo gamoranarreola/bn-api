@@ -1,20 +1,20 @@
 from django.urls import path
 
 from .views import (
+    admin_staff_lines,
     admin_work_orders,
     beautiers,
     beautier_by_id,
     beautiers_for_specialties,
     calendars_for_beautiers,
-    customer_profiles,
+    admin_customer_profiles,
     service_by_id,
     service_by_category_id,
     service_categories,
     service_category_by_id,
     UserActivationView,
     me,
-    staffing_assignment,
-    staffing_assignment_beautier,
+    admin_staff_assignments,
     work_orders,
     handle_payment,
     get_formatted_address
@@ -31,13 +31,14 @@ urlpatterns = [
     path('api/service-categories/<int:pk>', service_category_by_id),
     path('activate/<str:uid>/<str:token>', UserActivationView.as_view()),
     path('api/work-orders', work_orders),
-    path('api/staffing-assignment', staffing_assignment),
-    path('api/staffing-assignment/beautier', staffing_assignment_beautier),
     path('api/payment/', handle_payment),
     path('api/formatted-address/', get_formatted_address),
     path('api/users/me', me),
 
     # ADMIN
-    path('api/admin/customer-profiles', customer_profiles),
-    path('api/admin/work-orders', admin_work_orders)
+    path('api/admin/customer-profiles', admin_customer_profiles),
+    path('api/admin/work-orders', admin_work_orders),
+    path('api/admin/staff-assignments/', admin_staff_assignments),
+    path('api/admin/staff-lines/', admin_staff_lines),
+    path('api/admin/staff-lines/<int:pk>', admin_staff_lines),
 ]
