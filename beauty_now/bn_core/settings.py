@@ -1,25 +1,45 @@
+import io
 import os
 from datetime import timedelta
+
+import environ
+from google.cloud import secretmanager
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env(DEBUG=(bool, False))
+
+if os.environ.get('GOOGLE_CLOUD_PROJECT', None):
+    project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get('SETTINGS_NAME', 'django_settings')
+    name = f'projects/{project_id}/secrets/{settings_name}/versions/latest'
+    payload = client.access_secret_version(name=name).payload.data.decode('UTF-8')
+
+    env.read_env(io.StringIO(payload))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2mcb5#xm33_*ozkyqm!e4n_t2vq#&rrlx+vr^cmghtv7)h9t$t'
+if os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    SECRET_KEY = environ('SECRET_KEY')
+else:
+    SECRET_KEY = '2mcb5#xm33_*ozkyqm!e4n_t2vq#&rrlx+vr^cmghtv7)h9t$t'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    DEBUG = False
+else:
+    DEBUG = True
 
-# ALLOWED_HOSTS
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'localhost',
-    'beauty-now-api.herokuapp.com',
-]
+if os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [
+        '127.0.0.1',
+        'localhost',
+    ]
 
 # Application definition
 
@@ -99,18 +119,21 @@ ROOT_URLCONF = 'bn_core.urls'
 
 WSGI_APPLICATION = 'bn_core.wsgi.application'
 
-
-# DATABASES
-DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('SQL_DATABASE', 'beauty_now_db_dev'),
-        'USER': os.environ.get('SQL_USER', 'beauty_now_db_dev'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD', 'beauty_now_db_dev'),
-        'HOST': os.environ.get('SQL_HOST', 'localhost'),
-        'PORT': os.environ.get('SQL_PORT', '5432'),
+if os.getenv('USE_CLOUD_SQL_AUTH_PROXY', None):
+    DATABASES = {'default': env.db()}
+    DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES['default']['PORT'] = 5432
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'beauty_now_db_dev',
+            'USER': 'beauty_now_db_dev',
+            'PASSWORD': 'beauty_now_db_dev',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
     }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -151,13 +174,16 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 
-# CORS_ORIGIN_WHITELIST
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8100',
-    'https://localhost:8100',
-    'http://localhost:4200',
-    'https://beauty-now-client.herokuapp.com',
-]
+if os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    CORS_ORIGIN_WHITELIST = [
+        'https://beauty-now-313716.wl.r.appspot.com',
+        'https://beautynow.app',
+    ]
+else:
+    CORS_ORIGIN_WHITELIST = [
+        'http://localhost:8100',
+        'https://localhost:8100',
+    ]
 
 AUTHENTICATION_BACKENDS = (
     # Facebook
@@ -181,16 +207,6 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email'
 }
-
-# Google config
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1029659652093-a0m8ab8i3kupn9hetvf140ut049r477u.apps.googleusercontent.com'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'of72yGw80_lCzdWHIlyuh985'
-
-# Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    # 'https://www.googleapis.com/auth/userinfo.email',
-    # 'https://www.googleapis.com/auth/userinfo.profile',
-# ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER = 'registro@beautynow.mx'
