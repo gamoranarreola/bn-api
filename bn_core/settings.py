@@ -3,7 +3,9 @@ import os
 from datetime import timedelta
 
 import environ
-from google.cloud import secretmanager
+
+if os.environ.get('GOOGLE_CLOUD_PROJECT', None):
+    from google.cloud import secretmanager
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
