@@ -3,3 +3,7 @@
 *.session.sql
 .coverage
 /htmlcov
+/env
+cloud_sql_proxy
+/static
+/gcp

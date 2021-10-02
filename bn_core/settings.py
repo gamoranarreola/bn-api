@@ -12,35 +12,50 @@ if os.environ.get('GOOGLE_CLOUD_PROJECT', None):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 env = environ.Env(DEBUG=(bool, False))
+env_file = os.path.join(BASE_DIR, '.env')
 
-if os.environ.get('GOOGLE_CLOUD_PROJECT', None):
-    project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+if os.path.isfile(env_file):
+    env.read_env(env_file)
+elif os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
     client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.environ.get('SETTINGS_NAME', 'django_settings')
+    settings_name = os.getenv('SETTINGS_NAME', 'django_settings')
     name = f'projects/{project_id}/secrets/{settings_name}/versions/latest'
     payload = client.access_secret_version(name=name).payload.data.decode('UTF-8')
 
     env.read_env(io.StringIO(payload))
+else:
+    raise Exception('No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-if os.getenv('GOOGLE_CLOUD_PROJECT', None):
-    SECRET_KEY = environ('SECRET_KEY')
-else:
-    SECRET_KEY = '2mcb5#xm33_*ozkyqm!e4n_t2vq#&rrlx+vr^cmghtv7)h9t$t'
-
 if os.getenv('GOOGLE_CLOUD_PROJECT', None):
     DEBUG = False
+
+    ALLOWED_HOSTS = [
+        '*'
+    ]
+
+    SECRET_KEY = env('SECRET_KEY')
+
+    CORS_ORIGIN_WHITELIST = [
+        'https://beauty-now-313716.wl.r.appspot.com',
+        'https://beautynow.app',
+    ]
+
 else:
     DEBUG = True
 
-if os.getenv('GOOGLE_CLOUD_PROJECT', None):
-    ALLOWED_HOSTS = ['*']
-else:
     ALLOWED_HOSTS = [
         '127.0.0.1',
         'localhost',
+    ]
+
+    SECRET_KEY = '7j+o-t^gvqr5yice#l4fn9(mydgvo1y#^*g8y0fq+o8%jw@05m'
+
+    CORS_ORIGIN_WHITELIST = [
+        'http://localhost:8100',
+        'https://localhost:8100',
     ]
 
 # Application definition
@@ -123,8 +138,12 @@ WSGI_APPLICATION = 'bn_core.wsgi.application'
 
 if os.getenv('USE_CLOUD_SQL_AUTH_PROXY', None):
     DATABASES = {'default': env.db()}
-    DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES['default']['HOST'] = env('DB_HOST')
     DATABASES['default']['PORT'] = 5432
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
+    DATABASES['default']['NAME'] = env('DB_NAME')
+    DATABASES['default']['USER'] = env('DB_USER')
+    DATABASES['default']['PASSWORD'] = env('DB_PASS')
 else:
     DATABASES = {
         'default': {
@@ -174,18 +193,6 @@ USE_TZ = True
 
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
-
-
-if os.getenv('GOOGLE_CLOUD_PROJECT', None):
-    CORS_ORIGIN_WHITELIST = [
-        'https://beauty-now-313716.wl.r.appspot.com',
-        'https://beautynow.app',
-    ]
-else:
-    CORS_ORIGIN_WHITELIST = [
-        'http://localhost:8100',
-        'https://localhost:8100',
-    ]
 
 AUTHENTICATION_BACKENDS = (
     # Facebook

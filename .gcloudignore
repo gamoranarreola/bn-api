@@ -23,3 +23,5 @@ __pycache__/
 .editorconfig
 .flake8
 pytest.ini
+/env
+cloud_sql_proxy
