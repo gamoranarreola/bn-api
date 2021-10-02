@@ -12,6 +12,7 @@ class AuthUserAdmin(UserAdmin):
     model = AuthUser
 
     list_display = (
+        'id',
         'email',
         'last_name',
         'first_name',
