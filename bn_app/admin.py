@@ -19,7 +19,7 @@ class AuthUserAdmin(UserAdmin):
         'is_active',
     )
 
-    list_filter = (\
+    list_filter = (
         'email',
         'last_name',
         'first_name',
@@ -36,8 +36,8 @@ class AuthUserAdmin(UserAdmin):
                     'first_name',
                     'last_name',
                     'password',
-                )
-            }
+                ),
+            },
         ),
         (
             'Permissions',
@@ -45,15 +45,18 @@ class AuthUserAdmin(UserAdmin):
                 'fields': (
                     'is_staff',
                     'is_active',
-                )
-            }
+                ),
+            },
         ),
     )
 
     add_fieldsets = (
         (
-            None, {
-                'classes': ('wide',),
+            None,
+            {
+                'classes': (
+                    'wide',
+                ),
                 'fields': (
                     'email',
                     'first_name',
@@ -61,10 +64,10 @@ class AuthUserAdmin(UserAdmin):
                     'password1',
                     'password2',
                     'is_staff',
-                    'is_active'
-                )
-            }
-        )
+                    'is_active',
+                ),
+            },
+        ),
     )
 
     search_fields = ('email',)
@@ -106,4 +109,5 @@ class BeautierProfileAdmin(admin.ModelAdmin):
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(BeautierProfile, BeautierProfileAdmin)
 """
+admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
