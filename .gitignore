@@ -7,3 +7,5 @@
 cloud_sql_proxy
 /static
 /gcp
+cert.pem
+key.pem

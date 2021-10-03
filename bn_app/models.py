@@ -116,6 +116,7 @@ class WorkOrder(models.Model):
     line_items = models.ManyToManyField('LineItem')
     notes = models.CharField(max_length=256, blank=True)
     status = models.CharField(max_length=32, default='initial_request')
+    payment_id = models.CharField(max_length=64, default='')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

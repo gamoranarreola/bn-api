@@ -10,7 +10,7 @@ from uritemplate.api import partial
 
 conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
 conekta.locale = 'es'
-conekta.api_version = "2.5.1"
+
 
 from bn_utils.google.google import (
     get_calendar_service,
@@ -220,14 +220,6 @@ def handle_payment(request):
 
         auth_user = AuthUser.objects.get(pk=request.user.id)
 
-        customer = conekta.Customer.create({
-            'name': request.data.get('customer')['name'],
-            'metadata': {
-                'description': 'Compra de Servicios'
-            },
-            'payment_sources': request.data.get('customer')['payment_sources']
-        })
-
         line_items = []
 
         for line_item in request.data.get('work_order')['line_items']:
@@ -242,15 +234,21 @@ def handle_payment(request):
             'line_items': line_items,
             'currency': 'mxn',
             'customer_info': {
-                'customer_id': customer.id,
+                'name': request.data.get('customer')['name'],
+                'email': 'test@test.com',
+                'phone': '+529999999999',
+                'corporate': False,
+                'vertical_info': {},
             },
             'metadata': {
                 'description': 'Compra de Servicio(s)'
             },
             'charges': [{
                 'payment_method': {
-                    'type': 'default'
-                }
+                    'type': 'card',
+                    'token_id': request.data.get('customer')['payment_sources'][0]['token_id']
+                },
+                'amount': request.data.get('amount'),
             }]
         })
 
@@ -260,9 +258,10 @@ def handle_payment(request):
                 'request_date': request.data.get('work_order')['request_date'],
                 'request_time': request.data.get('work_order')['request_time'],
                 'place_id': request.data.get('work_order')['place_id'],
-                'customer_profile': CustomerProfile.objects.get(auth_user=auth_user).id,
+                'customer_profile_id': CustomerProfile.objects.get(auth_user=auth_user).id,
                 'notes': request.data.get('work_order')['notes'],
                 'status': request.data.get('work_order')['status'],
+                'payment_id': order.id
             })
 
             if work_order_serializer.is_valid():
@@ -294,14 +293,16 @@ def handle_payment(request):
                     if customer_profile_address_serializer.is_valid():
                         customer_profile_address_serializer.save()
 
-            return response_200({
-                'payment_status': order.payment_status,
-                'payment_amount': f'${str((order.amount / 100))} {order.currency}',
-                'payment_method': {
-                    'brand': order.charges[0].payment_method.brand,
-                    'last4': order.charges[0].payment_method.last4,
-                }
-            })
+                return response_200({
+                    'payment_status': order.payment_status,
+                    'payment_amount': f'${str((order.amount / 100))} {order.currency}',
+                    'payment_method': {
+                        'brand': order.charges[0].payment_method.brand,
+                        'last4': order.charges[0].payment_method.last4,
+                    }
+                })
+
+            return response_400({})
 
     except Exception as err:
         return response_500(err)

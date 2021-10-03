@@ -25,3 +25,5 @@ __pycache__/
 pytest.ini
 /env
 cloud_sql_proxy
+cert.pem
+key.pem

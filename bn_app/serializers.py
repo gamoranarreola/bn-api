@@ -253,6 +253,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             'notes',
             'line_items',
             'status',
+            'payment_id',
         ]
 
         optional_fields = ['customer_profile_id']
