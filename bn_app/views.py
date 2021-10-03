@@ -219,11 +219,9 @@ def handle_payment(request):
     try:
 
         auth_user = AuthUser.objects.get(pk=request.user.id)
-        work_order = request.data.get('work_order')
 
         customer = conekta.Customer.create({
             'name': request.data.get('customer')['name'],
-            'email': request.data.get('customer')['email'],
             'metadata': {
                 'description': 'Compra de Servicios'
             },
