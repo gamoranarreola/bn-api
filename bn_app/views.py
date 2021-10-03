@@ -1,12 +1,12 @@
 from requests.api import post
 from django.db import transaction
+from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import googlemaps
 import conekta
-from uritemplate.api import partial
 
 conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
 conekta.locale = 'es'
@@ -220,6 +220,16 @@ def handle_payment(request):
 
         auth_user = AuthUser.objects.get(pk=request.user.id)
 
+        customer_info = {
+            'name': request.data.get('customer')['name'],
+            'corporate': False,
+            'vertical_info': {},
+        }
+
+        if settings.DEBUG == True:
+            customer_info['email'] = 'test@test.com'
+            customer_info['phone'] = '+529999999999'
+
         line_items = []
 
         for line_item in request.data.get('work_order')['line_items']:
@@ -233,13 +243,7 @@ def handle_payment(request):
         order = conekta.Order.create({
             'line_items': line_items,
             'currency': 'mxn',
-            'customer_info': {
-                'name': request.data.get('customer')['name'],
-                'email': 'test@test.com',
-                'phone': '+529999999999',
-                'corporate': False,
-                'vertical_info': {},
-            },
+            'customer_info': customer_info,
             'metadata': {
                 'description': 'Compra de Servicio(s)'
             },
