@@ -27,3 +27,7 @@ pytest.ini
 cloud_sql_proxy
 cert.pem
 key.pem
+migrations/
+bn_utils/data
+.env
+README.md

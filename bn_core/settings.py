@@ -30,10 +30,7 @@ elif os.getenv('GOOGLE_CLOUD_PROJECT', None):
 if os.getenv('GOOGLE_CLOUD_PROJECT', None):
     DEBUG = False
 
-    ALLOWED_HOSTS = [
-        '*'
-    ]
-
+    ALLOWED_HOSTS = ['*']
     SECRET_KEY = env('SECRET_KEY')
 
     CORS_ORIGIN_WHITELIST = [
