@@ -7,7 +7,7 @@
     "specialty_ids": [
       1
     ],
-    "name": "Maquillaje Social Dia o Noche",
+    "name": "Maquillaje Social Día o Noche",
     "includes_eyelashes": true,
     "availability": {
       "monday": {
@@ -52,7 +52,7 @@
     "specialty_ids": [
       8
     ],
-    "name": "Peinado Basico",
+    "name": "Peinado Básico",
     "includes_eyelashes": false,
     "availability": {
       "monday": {
@@ -316,7 +316,7 @@
       8,
       9
     ],
-    "name": "Maquillaje y Peinado Ninas Festival",
+    "name": "Maquillaje y Peinado Niñas Festival",
     "includes_eyelashes": true,
     "availability": {
       "monday": {
@@ -817,7 +817,7 @@
       1,
       9
     ],
-    "name": "Maquillaje y Peinado Damas y Acompanantes",
+    "name": "Maquillaje y Peinado Damas y Acompañantes",
     "includes_eyelashes": false,
     "availability": {
       "monday": {
@@ -863,7 +863,7 @@
       1,
       9
     ],
-    "name": "Maquillaje Damas y Acompanantes",
+    "name": "Maquillaje Damas y Acompañantes",
     "includes_eyelashes": false,
     "availability": {
       "monday": {
@@ -908,7 +908,7 @@
     "specialty_ids": [
       9
     ],
-    "name": "Peinado Damas y Acompanantes",
+    "name": "Peinado Damas y Acompañantes",
     "includes_eyelashes": false,
     "availability": {
       "monday": {
