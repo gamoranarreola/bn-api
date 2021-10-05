@@ -51,6 +51,7 @@ else:
     CORS_ORIGIN_WHITELIST = [
         'http://localhost:8100',
         'https://localhost:8100',
+        'http://localhost:4200',
     ]
 
 # Application definition
@@ -133,7 +134,7 @@ WSGI_APPLICATION = 'bn_core.wsgi.application'
 
 if os.getenv('USE_CLOUD_SQL_AUTH_PROXY', None):
     DATABASES = {'default': env.db()}
-    DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES['default']['HOST'] = '/cloudsql/beauty-now-313716:us-west2:beautynow'
     DATABASES['default']['PORT'] = 5432
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
     DATABASES['default']['NAME'] = 'beautynow'

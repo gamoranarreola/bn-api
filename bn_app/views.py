@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 import googlemaps
 import conekta
 
-conekta.api_key = 'key_qrXw7xpD26Czohm81ErhrA'
+conekta.api_key = 'key_L3V87jveqhqJgbVaSFUqrw'
 conekta.locale = 'es'
 
 

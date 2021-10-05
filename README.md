@@ -21,3 +21,5 @@ To describe the SQL instance:
 ```
 gcloud sql instances describe beautynow
 ```
+To perform migrations on the GCP SQL instance:
+* The database host must be **localhost** or **127.0.0.1**. It must somehow be set temporarily to this value. But, in **settings.py**, make sure to keep the **cloudsql** URL intact. This is the value that must be present for the API to be able to connect to the database.
