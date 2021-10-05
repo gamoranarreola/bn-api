@@ -17,3 +17,7 @@ To create a secret from a file:
 ```
 gcloud secrets create django_settings --data-file .env
 ```
+To describe the SQL instance:
+```
+gcloud sql instances describe beautynow
+```

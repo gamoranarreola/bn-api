@@ -17,7 +17,7 @@ env_file = os.path.join(BASE_DIR, '.env')
 if os.path.isfile(env_file):
     env.read_env(env_file)
 elif os.getenv('GOOGLE_CLOUD_PROJECT', None):
-    project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
+    project_id = os.getenv('GOOGLE_CLOUD_PROJECT', None)
     client = secretmanager.SecretManagerServiceClient()
     settings_name = os.getenv('SETTINGS_NAME', 'django_settings')
     name = f'projects/{project_id}/secrets/{settings_name}/versions/latest'
@@ -133,11 +133,11 @@ WSGI_APPLICATION = 'bn_core.wsgi.application'
 
 if os.getenv('USE_CLOUD_SQL_AUTH_PROXY', None):
     DATABASES = {'default': env.db()}
-    DATABASES['default']['HOST'] = env('DB_HOST')
+    DATABASES['default']['HOST'] = '127.0.0.1'
     DATABASES['default']['PORT'] = 5432
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
-    DATABASES['default']['NAME'] = env('DB_NAME')
-    DATABASES['default']['USER'] = env('DB_USER')
+    DATABASES['default']['NAME'] = 'beautynow'
+    DATABASES['default']['USER'] = 'beautynow'
     DATABASES['default']['PASSWORD'] = env('DB_PASS')
 else:
     DATABASES = {
