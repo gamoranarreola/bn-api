@@ -1,3 +1,4 @@
+import os
 from requests.api import post
 from django.db import transaction
 from django.conf import settings
@@ -8,8 +9,13 @@ from rest_framework.views import APIView
 import googlemaps
 import conekta
 
-conekta.api_key = 'key_L3V87jveqhqJgbVaSFUqrw'
 conekta.locale = 'es'
+
+if os.getenv('GOOGLE_CLOUD_PROJECT', None):
+    # Will be changed to PROD key as soon as all is ready.
+    conekta.api_key = os.getenv('CONEKTA_KEY_DEV', None)
+else:
+    conekta.api_key = 'key_L3V87jveqhqJgbVaSFUqrw'
 
 
 from bn_utils.google.google import (
