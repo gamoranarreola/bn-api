@@ -26,7 +26,6 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
             'first_name',
             'last_name',
             'email',
-            'phone',
             'password'
         ]
 
@@ -38,11 +37,13 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
     def create(self, validated_data):
 
+        if self.initial_data['password'] != self.initial_data['password_confirm']:
+            return False
+
         user = AuthUser(
             first_name=self.validated_data['first_name'],
             last_name=self.validated_data['last_name'],
             email=self.validated_data['email'],
-            phone=self.validated_data['phone'],
             is_active=False
         )
 
@@ -51,7 +52,7 @@ class UserCreateSerializer(BaseUserRegistrationSerializer):
 
         profile = CustomerProfile(
             auth_user =  user,
-            customer_id = f'C{user.id * 2 + 100}',
+            customer_profile_id = f'C{user.id * 2 + 100}',
         )
 
         profile.save();

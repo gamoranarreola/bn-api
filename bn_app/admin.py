@@ -1,7 +1,7 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 
-from .models import AuthUser, CustomerProfile
+from .models import AuthUser, CustomerProfile, Service, ServiceCategory
 from .forms import AuthUserCreationForm, AuthUserChangeForm
 
 
@@ -112,3 +112,5 @@ admin.site.register(BeautierProfile, BeautierProfileAdmin)
 """
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
+admin.site.register(ServiceCategory)
+admin.site.register(Service)
