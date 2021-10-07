@@ -52,6 +52,7 @@ class CustomerProfileAddress(models.Model):
 class BeautierProfile(models.Model):
 
     auth_user = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
+    preferred_name = models.CharField(max_length=64, blank=True)
     specialties = models.ManyToManyField('Specialty')
     calendar_id = models.CharField(max_length=128, null=True)
     availability = JSONField(default=dict)
