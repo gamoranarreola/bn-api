@@ -95,8 +95,6 @@ class BeautierProfileAdmin(admin.ModelAdmin):
         'calendar_id',
     )
 
-    readonly_fields = ('auth_user',)
-
 
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
