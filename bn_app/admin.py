@@ -1,7 +1,7 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 
-from .models import AuthUser, CustomerProfile, Service, ServiceCategory
+from .models import AuthUser, BeautierProfile, CustomerProfile, Service, ServiceCategory
 from .forms import AuthUserCreationForm, AuthUserChangeForm
 
 
@@ -88,12 +88,6 @@ class CustomerProfileAdmin(admin.ModelAdmin):
     )
 
 
-"""
-class BeautierSpecialtyInline(admin.TabularInline):
-
-    model = BeautierProfileSpecialty
-
-
 class BeautierProfileAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -101,16 +95,11 @@ class BeautierProfileAdmin(admin.ModelAdmin):
         'calendar_id',
     )
 
-    inlines = [
-        BeautierSpecialtyInline,
-    ]
-
     readonly_fields = ('auth_user',)
 
-admin.site.register(AuthUser, AuthUserAdmin)
-admin.site.register(BeautierProfile, BeautierProfileAdmin)
-"""
+
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
 admin.site.register(ServiceCategory)
 admin.site.register(Service)
+admin.site.register(BeautierProfile, BeautierProfileAdmin)
