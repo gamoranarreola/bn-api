@@ -251,6 +251,7 @@ class WorkOrderSerializer(serializers.ModelSerializer):
             'customer_profile',
             'customer_profile_id',
             'place_id',
+            'address',
             'notes',
             'line_items',
             'status',

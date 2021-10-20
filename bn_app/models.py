@@ -2,7 +2,6 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db.models import JSONField
 from django.db import models
-from django.db.models.aggregates import Max
 
 from .managers import AuthUserManager
 
@@ -112,7 +111,8 @@ class WorkOrder(models.Model):
 
     request_date = models.CharField(null=True, max_length=10)
     request_time = models.CharField(null=True, max_length=8)
-    place_id = models.CharField(max_length=512, null=True)
+    place_id = models.CharField(max_length=512, null=True, blank=True)
+    address = models.JSONField(default=dict)
     customer_profile = models.ForeignKey('CustomerProfile', on_delete=models.DO_NOTHING)
     line_items = models.ManyToManyField('LineItem')
     notes = models.CharField(max_length=256, blank=True)

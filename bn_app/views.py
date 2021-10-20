@@ -256,7 +256,7 @@ def handle_payment(request):
             'charges': [{
                 'payment_method': {
                     'type': 'card',
-                    'token_id': request.data.get('customer')['payment_sources'][0]['token_id']
+                    'token_id': 'tok_test_visa_4242'
                 },
                 'amount': request.data.get('amount'),
             }]
@@ -264,10 +264,21 @@ def handle_payment(request):
 
         if order.payment_status == 'paid':
 
+            if 'place_id' in request.data.get('work_order'):
+                place_id = request.data.get('work_order')['place_id']
+            else:
+                place_id = ''
+
+            if 'address' in request.data.get('work_order'):
+                address = request.data.get('work_order')['address']
+            else:
+                address = {}
+
             work_order_serializer = WorkOrderSerializer(data={
                 'request_date': request.data.get('work_order')['request_date'],
                 'request_time': request.data.get('work_order')['request_time'],
-                'place_id': request.data.get('work_order')['place_id'],
+                'place_id': place_id,
+                'address':  address,
                 'customer_profile_id': CustomerProfile.objects.get(auth_user=auth_user).id,
                 'notes': request.data.get('work_order')['notes'],
                 'status': request.data.get('work_order')['status'],
@@ -293,11 +304,11 @@ def handle_payment(request):
                         line_item_instance = line_item_serializer.save()
                         work_order_instance.line_items.add(line_item_instance)
 
-                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=auth_user.id)).filter(place_id=request.data.get('work_order')['place_id']).exists():
+                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=auth_user.id)).filter(place_id=place_id).exists():
 
                     customer_profile_address_serializer = CustomerProfileAddressSerializer(data={
                         'customer_profile': CustomerProfile.objects.get(auth_user=auth_user).id,
-                        'place_id': request.data.get('work_order')['place_id']
+                        'place_id': place_id
                     })
 
                     if customer_profile_address_serializer.is_valid():
@@ -435,6 +446,10 @@ def admin_staff_assignments(request):
 
     try:
 
+        """
+        We want to get the line items for a given work order and then get the
+        staff assignments for those line items.
+        """
         staff_assignments = StaffAssignment.objects.filter(line_item_id=request.data.get('line_item_id'))
         serializer = StaffAssigmentSerializer(staff_assignments, many=True)
 
