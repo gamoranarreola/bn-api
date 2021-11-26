@@ -18,7 +18,7 @@ gcloud sql instances describe beautynow
 ## Running Migrations on GCP
 To connect to the SQL instance, run the following in a terminal window:
 ```
-./cloud_sql_proxy -instances="beauty-now-313716:us-west2:beautynow"=tcp:5432
+./cloud_sql_proxy -instances="beauty-now-313716:us-central1:beautnow"=tcp:5432
 ```
 Then, in a new window, set the following environment variables:
 ```
