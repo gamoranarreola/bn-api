@@ -78,6 +78,7 @@ class ServiceCategory(models.Model):
     name = models.CharField(max_length=50)
     panel = models.BooleanField(default=False)
     services = models.ManyToManyField('Service')
+    active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

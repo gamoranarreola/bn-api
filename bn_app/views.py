@@ -164,7 +164,7 @@ def service_categories(request):
 
     try:
 
-        serviceCategories = ServiceCategory.objects.all()
+        serviceCategories = ServiceCategory.objects.filter(active=True)
         serializer = ServiceCategorySerializer(serviceCategories, many=True)
 
         return response_200(serializer.data)

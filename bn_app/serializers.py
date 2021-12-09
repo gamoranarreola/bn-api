@@ -144,7 +144,8 @@ class ServiceSerializer(serializers.ModelSerializer):
             'availability',
             'duration',
             'public_price',
-            'specialties'
+            'specialties',
+            'active',
         ]
 
 
@@ -159,7 +160,8 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
             'id',
             'name',
             'panel',
-            'services'
+            'services',
+            'active',
         ]
 
 
