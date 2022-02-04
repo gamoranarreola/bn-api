@@ -1,3 +1,40 @@
+from bn_core.tasks import handle_initial_work_order_request
+from bn_utils.responses.generic_responses import (
+    response_200,
+    response_201,
+    response_204,
+    response_400,
+    response_500
+)
+from .serializers import (
+    CustomerProfileSerializer,
+    LineItemSerializer,
+    MeSerializer,
+    BeautierProfileSerializer,
+    ServiceSerializer,
+    ServiceCategorySerializer,
+    StaffAssigmentSerializer,
+    StaffLineSerializer,
+    WorkOrderSerializer,
+    CustomerProfileAddressSerializer
+)
+from .models import (
+    AuthUser,
+    BeautierProfile,
+    Service,
+    ServiceCategory,
+    CustomerProfile,
+    CustomerProfileAddress,
+    StaffAssignment,
+    StaffLine,
+    WorkOrder
+)
+from bn_utils.google.google import (
+    get_calendar_service,
+    handle_calendar_params,
+    handle_free_busy_data,
+    handle_events_data
+)
 import os
 from requests.api import post
 from django.db import transaction
@@ -16,49 +53,6 @@ if os.getenv('GOOGLE_CLOUD_PROJECT', None):
     conekta.api_key = os.getenv('CONEKTA_KEY_DEV', None)
 else:
     conekta.api_key = 'key_L3V87jveqhqJgbVaSFUqrw'
-
-
-from bn_utils.google.google import (
-    get_calendar_service,
-    handle_calendar_params,
-    handle_free_busy_data,
-    handle_events_data
-)
-
-from .models import (
-    AuthUser,
-    BeautierProfile,
-    Service,
-    ServiceCategory,
-    CustomerProfile,
-    CustomerProfileAddress,
-    StaffAssignment,
-    StaffLine,
-    WorkOrder
-)
-
-from .serializers import (
-    CustomerProfileSerializer,
-    LineItemSerializer,
-    MeSerializer,
-    BeautierProfileSerializer,
-    ServiceSerializer,
-    ServiceCategorySerializer,
-    StaffAssigmentSerializer,
-    StaffLineSerializer,
-    WorkOrderSerializer,
-    CustomerProfileAddressSerializer
-)
-
-from bn_utils.responses.generic_responses import (
-    response_200,
-    response_201,
-    response_204,
-    response_400,
-    response_500
-)
-
-from bn_core.tasks import handle_initial_work_order_request
 
 
 class UserActivationView(APIView):
@@ -221,13 +215,15 @@ def calendars_for_beautiers(request):
 @api_view(http_method_names=['POST'])
 @permission_classes([IsAuthenticated])
 def handle_payment(request):
-
+    token_id = request.data.get('customer')['payment_sources']['token_id']
     try:
 
         auth_user = AuthUser.objects.get(pk=request.user.id)
 
         customer_info = {
             'name': request.data.get('customer')['name'],
+            'email': request.data.get('customer')['email'],
+            'phone': '+525533445566',
             'corporate': False,
             'vertical_info': {},
         }
@@ -256,9 +252,9 @@ def handle_payment(request):
             'charges': [{
                 'payment_method': {
                     'type': 'card',
-                    'token_id': 'tok_test_visa_4242'
+                    'token_id': token_id
                 },
-                'amount': request.data.get('amount'),
+                'amount': request.data.get('amount')*100,
             }]
         })
 
@@ -411,6 +407,7 @@ def get_formatted_address(request):
 ADMIN ENDPOINTS
 """
 
+
 @api_view(http_method_names=['GET'])
 @permission_classes([IsAuthenticated, IsAdminUser])
 def admin_customer_profiles(request):
@@ -419,7 +416,7 @@ def admin_customer_profiles(request):
 
         customer_profile_serializer = CustomerProfileSerializer(CustomerProfile.objects.all(), many=True)
 
-        return response_200(customer_profile_serializer.data);
+        return response_200(customer_profile_serializer.data)
 
     except Exception as err:
         return response_500(err)
@@ -455,7 +452,6 @@ def admin_staff_assignments(request):
 
         return response_200(serializer.data)
 
-
     except Exception as err:
         return response_500(err)
 
@@ -476,7 +472,7 @@ def admin_staff_lines(request, pk=None):
         elif request.method == 'DELETE':
 
             staff_line = StaffLine.objects.get(pk=pk)
-            staff_line.delete();
+            staff_line.delete()
 
             return response_204({})
 
