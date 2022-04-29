@@ -45,12 +45,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import googlemaps
 import conekta
-
+import json
 conekta.locale = 'es'
 
 if os.getenv('GOOGLE_CLOUD_PROJECT', None):
     # Will be changed to PROD key as soon as all is ready.
-    conekta.api_key = os.getenv('CONEKTA_KEY_DEV', None)
+    conekta.api_key = os.getenv('CONEKTA_KEY_DEV', 'key_qrXw7xpD26Czohm81ErhrA')
 else:
     conekta.api_key = 'key_L3V87jveqhqJgbVaSFUqrw'
 
@@ -215,12 +215,15 @@ def calendars_for_beautiers(request):
 @api_view(http_method_names=['POST'])
 @permission_classes([IsAuthenticated])
 def handle_payment(request):
-    token_id = request.data.get('customer')['payment_sources']['token_id']
+
+    tokenId = request.data.get('customer')['payment_sources']['token_id']
+
+    lineItems = []
+
     try:
 
-        auth_user = AuthUser.objects.get(pk=request.user.id)
-
-        customer_info = {
+        authUser = AuthUser.objects.get(pk=request.user.id)
+        customerInfo = {
             'name': request.data.get('customer')['name'],
             'email': request.data.get('customer')['email'],
             'phone': '+525533445566',
@@ -228,35 +231,30 @@ def handle_payment(request):
             'vertical_info': {},
         }
 
-        if settings.DEBUG == True:
-            customer_info['email'] = 'test@test.com'
-            customer_info['phone'] = '+529999999999'
-
-        line_items = []
-
-        for line_item in request.data.get('work_order')['line_items']:
-
-            line_items.append({
-                'name': line_item['service']['name'],
-                'unit_price': line_item['price'],
-                'quantity': line_item['quantity'],
+        for lineItem in request.data.get('work_order')['line_items']:
+            lineItems.append({
+                'name': lineItem['service']['name'],
+                'unit_price': lineItem['price'] * 100,
+                'quantity': lineItem['quantity'],
             })
 
-        order = conekta.Order.create({
-            'line_items': line_items,
-            'currency': 'mxn',
-            'customer_info': customer_info,
-            'metadata': {
-                'description': 'Compra de Servicio(s)'
-            },
-            'charges': [{
-                'payment_method': {
-                    'type': 'card',
-                    'token_id': token_id
-                },
-                'amount': request.data.get('amount')*100,
-            }]
-        })
+            order = conekta.Order.create({
+                "line_items": lineItems,
+                "customer_info": customerInfo,
+                "charges": [{
+                    "payment_method": {
+                        "type": "card",
+                        "token_id": tokenId,
+                    },
+                    "amount": request.data.get('amount') * 100
+                }],
+                "currency": "mxn",
+                "metadata": {"test": "extra info"}
+            })
+
+        # if settings.DEBUG == True:
+        #     customerInfo['email'] = 'test@test.com'
+        #     customerInfo['phone'] = '+529999999999'
 
         if order.payment_status == 'paid':
 
@@ -275,7 +273,7 @@ def handle_payment(request):
                 'request_time': request.data.get('work_order')['request_time'],
                 'place_id': place_id,
                 'address':  address,
-                'customer_profile_id': CustomerProfile.objects.get(auth_user=auth_user).id,
+                'customer_profile_id': CustomerProfile.objects.get(auth_user=authUser).id,
                 'notes': request.data.get('work_order')['notes'],
                 'status': request.data.get('work_order')['status'],
                 'payment_id': order.id
@@ -300,10 +298,10 @@ def handle_payment(request):
                         line_item_instance = line_item_serializer.save()
                         work_order_instance.line_items.add(line_item_instance)
 
-                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=auth_user.id)).filter(place_id=place_id).exists():
+                if not CustomerProfileAddress.objects.filter(customer_profile=CustomerProfile.objects.get(auth_user=authUser.id)).filter(place_id=place_id).exists():
 
                     customer_profile_address_serializer = CustomerProfileAddressSerializer(data={
-                        'customer_profile': CustomerProfile.objects.get(auth_user=auth_user).id,
+                        'customer_profile': CustomerProfile.objects.get(auth_user=authUser).id,
                         'place_id': place_id
                     })
 
@@ -311,6 +309,7 @@ def handle_payment(request):
                         customer_profile_address_serializer.save()
 
                 return response_200({
+                    'status': 'payed',
                     'payment_status': order.payment_status,
                     'payment_amount': f'${str((order.amount / 100))} {order.currency}',
                     'payment_method': {
@@ -325,8 +324,8 @@ def handle_payment(request):
         return response_500(err)
 
 
-@api_view(http_method_names=['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+@ api_view(http_method_names=['GET', 'POST'])
+@ permission_classes([IsAuthenticated])
 def work_orders(request):
 
     try:
@@ -388,8 +387,8 @@ def work_orders(request):
         return response_500(err)
 
 
-@api_view(http_method_names=['POST'])
-@permission_classes([IsAuthenticated])
+@ api_view(http_method_names=['POST'])
+@ permission_classes([IsAuthenticated])
 def get_formatted_address(request):
 
     google_maps_client = googlemaps.Client(key='AIzaSyAP1kEvf4GgsAVLzI2MLGKpi1w17nmNDTQ')
@@ -408,8 +407,8 @@ ADMIN ENDPOINTS
 """
 
 
-@api_view(http_method_names=['GET'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@ api_view(http_method_names=['GET'])
+@ permission_classes([IsAuthenticated, IsAdminUser])
 def admin_customer_profiles(request):
 
     try:
@@ -422,8 +421,8 @@ def admin_customer_profiles(request):
         return response_500(err)
 
 
-@api_view(http_method_names=['GET'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@ api_view(http_method_names=['GET'])
+@ permission_classes([IsAuthenticated, IsAdminUser])
 def admin_work_orders(request):
 
     try:
@@ -437,8 +436,8 @@ def admin_work_orders(request):
         return response_500(err)
 
 
-@api_view(http_method_names=['POST'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@ api_view(http_method_names=['POST'])
+@ permission_classes([IsAuthenticated, IsAdminUser])
 def admin_staff_assignments(request):
 
     try:
@@ -456,8 +455,8 @@ def admin_staff_assignments(request):
         return response_500(err)
 
 
-@api_view(http_method_names=['POST', 'DELETE', 'PATCH'])
-@permission_classes([IsAuthenticated, IsAdminUser])
+@ api_view(http_method_names=['POST', 'DELETE', 'PATCH'])
+@ permission_classes([IsAuthenticated, IsAdminUser])
 def admin_staff_lines(request, pk=None):
 
     try:
