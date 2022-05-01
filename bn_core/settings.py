@@ -50,7 +50,6 @@ else:
     SECRET_KEY = '7j+o-t^gvqr5yice#l4fn9(mydgvo1y#^*g8y0fq+o8%jw@05m'
 
     CORS_ORIGIN_WHITELIST = [
-        'http://localhost:8100',
         'https://localhost:8100',
         'http://localhost:4200',
     ]
