@@ -146,12 +146,13 @@ class ServiceSerializer(serializers.ModelSerializer):
             'public_price',
             'specialties',
             'active',
+            'order',
         ]
 
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
 
-    services = ServiceSerializer(many=True, read_only=True)
+    services = serializers.SerializerMethodField()
 
     class Meta:
         model = ServiceCategory
@@ -162,7 +163,12 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
             'panel',
             'services',
             'active',
+            'order',
         ]
+
+    def get_services(self, instance):
+        services = instance.services.filter(active=True).order_by('order')
+        return ServiceSerializer(services, many=True).data
 
 
 class BeautierProfileSerializer(serializers.ModelSerializer):
@@ -196,6 +202,7 @@ class StaffLineSerializer(serializers.ModelSerializer):
             'pay_out',
             'staff_assignment'
         ]
+
 
 class StaffAssigmentSerializer(serializers.ModelSerializer):
 

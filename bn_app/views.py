@@ -1,4 +1,3 @@
-from bn_core.tasks import handle_initial_work_order_request
 from bn_utils.responses.generic_responses import (
     response_200,
     response_201,
@@ -38,14 +37,12 @@ from bn_utils.google.google import (
 import os
 from requests.api import post
 from django.db import transaction
-from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import googlemaps
 import conekta
-import json
 conekta.locale = 'es'
 
 if os.getenv('GOOGLE_CLOUD_PROJECT', None):
@@ -158,7 +155,7 @@ def service_categories(request):
 
     try:
 
-        serviceCategories = ServiceCategory.objects.filter(active=True)
+        serviceCategories = ServiceCategory.objects.filter(active=True, order__gte=1).order_by('order')
         serializer = ServiceCategorySerializer(serviceCategories, many=True)
 
         return response_200(serializer.data)

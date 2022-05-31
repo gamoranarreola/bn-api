@@ -1,38 +1,56 @@
 [
   {
     "id": 1,
-    "name": "Maquillaje"
+    "name": "Maquillaje",
+    "panel": false,
+    "active": false
   },
   {
     "id": 2,
-    "name": "Peinado"
+    "name": "Peinado",
+    "panel": false,
+    "active": false
   },
   {
     "id": 3,
-    "name": "Maquillaje y Peinado"
+    "name": "Maquillaje y Peinado",
+    "panel": false,
+    "active": false
   },
   {
     "id": 4,
-    "name": "XV Años"
+    "name": "XV Años",
+    "panel": false,
+    "active": false
   },
   {
     "id": 5,
-    "name": "Novias y Acompañantes"
+    "name": "Novias y Acompañantes",
+    "panel": false,
+    "active": false
   },
   {
     "id": 6,
-    "name": "Uñas"
+    "name": "Uñas",
+    "panel": false,
+    "active": false
   },
   {
     "id": 7,
-    "name": "Manicure"
+    "name": "Manicure",
+    "panel": false,
+    "active": false
   },
   {
     "id": 8,
-    "name": "Pedicure"
+    "name": "Pedicure",
+    "panel": false,
+    "active": false
   },
   {
     "id": 9,
-    "name": "Aplicación de Gel"
+    "name": "Aplicación de Gel",
+    "panel": false,
+    "active": false
   }
 ]

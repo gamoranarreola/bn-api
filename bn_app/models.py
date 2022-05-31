@@ -79,6 +79,7 @@ class ServiceCategory(models.Model):
     panel = models.BooleanField(default=False)
     services = models.ManyToManyField('Service')
     active = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -93,7 +94,7 @@ class Service(models.Model):
     specialties = models.ManyToManyField('Specialty')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=512)
-    extras = models.CharField(max_length=512)
+    extras = models.CharField(max_length=512, blank=True, null=True)
     includes_eyelashes = models.BooleanField(default=False)
     availability = JSONField()
     duration = models.TimeField()
@@ -101,6 +102,7 @@ class Service(models.Model):
     beauty_now_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     public_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     active = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
