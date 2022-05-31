@@ -34,9 +34,9 @@ if os.getenv('GOOGLE_CLOUD_PROJECT', None):
     SECRET_KEY = env('SECRET_KEY')
 
     CORS_ORIGIN_WHITELIST = [
-        'https://beauty-now-313716.wl.r.appspot.com/*',
-        'https://beautynow.app/*',
-        'https://www.beautynow.app/*',
+        'https://beauty-now-313716.wl.r.appspot.com',
+        'https://beautynow.app',
+        'https://www.beautynow.app',
     ]
 
 else:
