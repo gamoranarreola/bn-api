@@ -8,6 +8,9 @@ from .managers import AuthUserManager
 
 class AuthUser(AbstractBaseUser, PermissionsMixin):
 
+    class Meta:
+        verbose_name_plural = 'Auth Users'
+
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     email = models.EmailField(unique=True, max_length=128)
@@ -28,6 +31,9 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 
 class CustomerProfile(models.Model):
 
+    class Meta:
+        verbose_name_plural = 'Customer Profiles'
+
     auth_user = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
     customer_profile_id = models.CharField(max_length=10, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -39,6 +45,9 @@ class CustomerProfile(models.Model):
 
 class CustomerProfileAddress(models.Model):
 
+    class Meta:
+        verbose_name_plural = 'Customer Profile Addresses'
+
     customer_profile = models.ForeignKey(CustomerProfile, on_delete=models.DO_NOTHING)
     place_id = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -49,6 +58,9 @@ class CustomerProfileAddress(models.Model):
 
 
 class BeautierProfile(models.Model):
+
+    class Meta:
+        verbose_name_plural = 'Beautier Profiles'
 
     auth_user = models.OneToOneField('AuthUser', on_delete=models.DO_NOTHING)
     preferred_name = models.CharField(max_length=64, blank=True)
@@ -112,6 +124,9 @@ class Service(models.Model):
 
 class WorkOrder(models.Model):
 
+    class Meta:
+        verbose_name_plural = 'Work Orders'
+
     request_date = models.CharField(null=True, max_length=10)
     request_time = models.CharField(null=True, max_length=8)
     place_id = models.CharField(max_length=512, null=True, blank=True)
@@ -130,6 +145,9 @@ class WorkOrder(models.Model):
 
 class LineItem(models.Model):
 
+    class Meta:
+        verbose_name_plural = 'Line Items'
+
     service = models.ForeignKey('Service', on_delete=models.DO_NOTHING)
     service_date = models.CharField(null=True, max_length=10)
     service_time = models.CharField(null=True, max_length=8)
@@ -146,6 +164,8 @@ class LineItem(models.Model):
 class StaffAssignment(models.Model):
 
     class Meta:
+        verbose_name_plural = 'Staff Assignments'
+
         constraints = [
             models.UniqueConstraint(fields=['line_item', 'index'], name='line_item_index')
         ]
@@ -161,6 +181,9 @@ class StaffAssignment(models.Model):
 
 
 class StaffLine(models.Model):
+
+    class Meta:
+        verbose_name_plural = 'Staff Lines'
 
     staff_assignment = models.ForeignKey('StaffAssignment', on_delete=models.CASCADE)
     auth_user = models.ForeignKey('AuthUser', null=True, default=None, on_delete=models.DO_NOTHING)
