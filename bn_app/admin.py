@@ -102,6 +102,7 @@ class BeautierProfileAdmin(admin.ModelAdmin):
                 'fields': (
                     'auth_user',
                     'preferred_name',
+                    'title',
                     'specialties',
                     'bio',
                     'photo_url',
