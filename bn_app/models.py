@@ -70,6 +70,7 @@ class BeautierProfile(models.Model):
     bio = models.TextField(max_length=1024, blank=True)
     photo_url = models.URLField(max_length=256, blank=True)
     phone = models.CharField(max_length=16, blank=True)
+    title = models.CharField(max_length=64)
 
 
 class Specialty(models.Model):
