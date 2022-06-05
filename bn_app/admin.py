@@ -95,6 +95,21 @@ class BeautierProfileAdmin(admin.ModelAdmin):
         'calendar_id',
     )
 
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'auth_user',
+                    'preferred_name',
+                    'specialties',
+                    'bio',
+                    'photo_url',
+                )
+            },
+        ),
+    )
+
 
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)

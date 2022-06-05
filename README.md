@@ -27,5 +27,5 @@ export USE_CLOUD_SQL_AUTH_PROXY=true
 ```
 To perform migrations on the GCP SQL instance, set **DATABASE['default']['HOST']** to **'localhost'** temporarily in **settings.py**. Once this is set, you can run migrations using the following command (don't forget to undo this temporary change to the **settings.py** file):
 ```
-python3.8 manage.py migrate
+python3.9 manage.py migrate
 ```
