@@ -69,6 +69,7 @@ class BeautierProfile(models.Model):
     availability = JSONField(default=dict)
     bio = models.TextField(max_length=1024, blank=True)
     photo_url = models.URLField(max_length=256, blank=True)
+    phone = models.CharField(max_length=16, blank=True)
 
 
 class Specialty(models.Model):

@@ -105,6 +105,7 @@ class BeautierProfileAdmin(admin.ModelAdmin):
                     'specialties',
                     'bio',
                     'photo_url',
+                    'phone',
                 )
             },
         ),
