@@ -106,7 +106,7 @@ class ServiceCategory(models.Model):
 class Service(models.Model):
 
     service_id = models.CharField(max_length=20)
-    category = models.ForeignKey('ServiceCategory', on_delete=models.DO_NOTHING)
+    categories = models.ManyToManyField('ServiceCategory')
     specialties = models.ManyToManyField('Specialty')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=512)
