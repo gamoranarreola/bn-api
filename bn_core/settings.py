@@ -134,8 +134,8 @@ WSGI_APPLICATION = 'bn_core.wsgi.application'
 
 if os.getenv('USE_CLOUD_SQL_AUTH_PROXY', None):
     DATABASES = {'default': env.db()}
-    # DATABASES['default']['HOST'] = '/cloudsql/beauty-now-313716:us-central1:beautnow'
-    DATABASES['default']['HOST'] = 'localhost'
+    DATABASES['default']['HOST'] = '/cloudsql/beauty-now-313716:us-central1:beautnow'
+    # DATABASES['default']['HOST'] = 'localhost'
     DATABASES['default']['PORT'] = 5432
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql'
     DATABASES['default']['NAME'] = 'beautynow'
