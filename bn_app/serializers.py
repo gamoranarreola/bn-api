@@ -124,32 +124,6 @@ class SpecialtySerializer(serializers.ModelSerializer):
         ]
 
 
-class ServiceSerializer(serializers.ModelSerializer):
-
-    category = serializers.PrimaryKeyRelatedField(read_only=True)
-    specialties = SpecialtySerializer(many=True, read_only=True)
-    description = serializers.CharField(allow_blank=True)
-
-    class Meta:
-
-        model = Service
-
-        fields = [
-            'id',
-            'service_id',
-            'category',
-            'name',
-            'description',
-            'includes_eyelashes',
-            'availability',
-            'duration',
-            'public_price',
-            'specialties',
-            'active',
-            'order',
-        ]
-
-
 class ServiceCategorySerializer(serializers.ModelSerializer):
 
     services = serializers.SerializerMethodField()
@@ -169,6 +143,30 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
     def get_services(self, instance):
         services = instance.services.filter(active=True).order_by('order')
         return ServiceSerializer(services, many=True).data
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+
+    specialties = SpecialtySerializer(many=True, read_only=True)
+    description = serializers.CharField(allow_blank=True)
+
+    class Meta:
+
+        model = Service
+
+        fields = [
+            'id',
+            'service_id',
+            'name',
+            'description',
+            'includes_eyelashes',
+            'availability',
+            'duration',
+            'public_price',
+            'specialties',
+            'active',
+            'order',
+        ]
 
 
 class BeautierProfileSerializer(serializers.ModelSerializer):

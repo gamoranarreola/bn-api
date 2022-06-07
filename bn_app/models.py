@@ -93,7 +93,7 @@ class ServiceCategory(models.Model):
 
     name = models.CharField(max_length=50)
     panel = models.BooleanField(default=False)
-    services = models.ManyToManyField('Service')
+    services = models.ManyToManyField('Service', related_name='category_services')
     active = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -106,7 +106,6 @@ class ServiceCategory(models.Model):
 class Service(models.Model):
 
     service_id = models.CharField(max_length=20)
-    categories = models.ManyToManyField('ServiceCategory')
     specialties = models.ManyToManyField('Specialty')
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=512)
