@@ -1,3 +1,14 @@
+import os
+from requests.api import post
+from django.db import transaction
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import googlemaps
+from google.cloud import storage
+import conekta
+
 from bn_utils.responses.generic_responses import (
     response_200,
     response_201,
@@ -34,15 +45,8 @@ from bn_utils.google.google import (
     handle_free_busy_data,
     handle_events_data
 )
-import os
-from requests.api import post
-from django.db import transaction
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
-import googlemaps
-import conekta
+
+
 conekta.locale = 'es'
 
 if os.getenv('GOOGLE_CLOUD_PROJECT', None):
@@ -89,6 +93,22 @@ def beautiers(request):
         serializer = BeautierProfileSerializer(beautiers, many=True)
 
         return response_200(serializer.data)
+
+    except Exception as err:
+        return response_500(err)
+
+
+@api_view(http_method_names=['GET'])
+def beautier_work(request, pk):
+
+    try:
+        storage_client = storage.Client()
+        urls = []
+
+        for blob in storage_client.list_blobs('bn_public', prefix=f'beautiers/{pk}/trabajos'):
+            urls.append(blob.public_url)
+
+        return response_200(urls)
 
     except Exception as err:
         return response_500(err)

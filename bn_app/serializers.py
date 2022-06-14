@@ -180,9 +180,10 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'auth_user',
-            'calendar_id',
             'specialties',
-            'availability'
+            'bio',
+            'photo_url',
+            'title'
         ]
 
 

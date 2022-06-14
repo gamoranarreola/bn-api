@@ -6,6 +6,7 @@ from .views import (
     admin_work_orders,
     beautiers,
     beautier_by_id,
+    beautier_work,
     beautiers_for_specialties,
     calendars_for_beautiers,
     admin_customer_profiles,
@@ -24,6 +25,7 @@ from .views import (
 urlpatterns = [
     path('api/beautiers', beautiers),
     path('api/beautiers/<int:pk>', beautier_by_id),
+    path('api/beautiers/<int:pk>/work', beautier_work),
     path('api/beautiers/specialties/', beautiers_for_specialties),
     path('api/beautiers-calendars', calendars_for_beautiers),
     path('api/services/<int:pk>', service_by_id),
