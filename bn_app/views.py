@@ -361,13 +361,13 @@ def work_orders(request):
                 work_order_savepoint = transaction.savepoint()
 
                 work_order_serializer = WorkOrderSerializer(data={
-                    'request_date': request.data.get('request_date'),
-                    'request_time': request.data.get('request_time'),
+                    'request_date': request.data.get('work_order')['request_date'],
+                    'request_time': request.data.get('work_order')['request_time'],
                     'customer_profile_id': CustomerProfile.objects.get(auth_user_id=AuthUser.objects.get(pk=request.user.id)).id,
-                    'place_id': request.data.get('place_id'),
-                    'notes': request.data.get('notes'),
-                    'status': request.data.get('status'),
-                    'line_items': request.data.get('line_items')
+                    'place_id': request.data.get('work_order')['place_id'],
+                    'notes': request.data.get('work_order')['notes'],
+                    'status': request.data.get('work_order')['status'],
+                    'line_items': request.data.get('work_order')['line_items']
                 })
 
                 if work_order_serializer.is_valid():
@@ -376,10 +376,10 @@ def work_orders(request):
                     transaction.savepoint_commit(work_order_savepoint)
                     line_items_savepoint = transaction.savepoint()
 
-                    for line_item in request.data.get('line_items'):
+                    for line_item in request.data.get('work_order')['line_items']:
 
                         line_item_instance = work_order_instance.line_items.create(
-                            service=Service.objects.get(pk=line_item['service_id']),
+                            service=Service.objects.get(pk=line_item.get('service')['service_id']),
                             service_date=line_item['service_date'],
                             service_time=line_item['service_time'],
                             quantity=line_item['quantity'],

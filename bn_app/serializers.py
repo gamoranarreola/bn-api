@@ -183,7 +183,8 @@ class BeautierProfileSerializer(serializers.ModelSerializer):
             'specialties',
             'bio',
             'photo_url',
-            'title'
+            'title',
+            'preferred_name'
         ]
 
 
