@@ -230,7 +230,6 @@ def calendars_for_beautiers(request):
 
 
 @api_view(http_method_names=['POST'])
-@permission_classes([IsAuthenticated])
 def handle_payment(request):
 
     tokenId = request.data.get('customer')['payment_sources']['token_id']

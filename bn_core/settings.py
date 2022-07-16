@@ -52,6 +52,7 @@ else:
     CORS_ORIGIN_WHITELIST = [
         'https://localhost:8100',
         'http://localhost:4200',
+        'https://localhost:4200',
     ]
 
 # Application definition
@@ -67,10 +68,6 @@ INSTALLED_APPS = [
     'bn_utils',
     'rest_framework',
     'rest_framework.authtoken',
-    'oauth2_provider',
-    'social_django',
-    'rest_framework_social_oauth2',
-    'djoser',
     'corsheaders',
 ]
 
@@ -87,8 +84,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -101,8 +96,6 @@ OAUTH2_PROVIDER = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-        'rest_framework_social_oauth2.authentication.SocialAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_RENDERER_CLASSES': [
@@ -192,27 +185,11 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = (
-    # Facebook
-    'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
-    # Google
-    'social_core.backends.google.GoogleOAuth2',
-    # Django Rest Framework
-    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     # Django
     'django.contrib.auth.backends.ModelBackend',
 )
 
 AUTH_USER_MODEL = 'bn_app.AuthUser'
-
-# FACEBOOK
-SOCIAL_AUTH_FACEBOOK_KEY = '435891111073407'
-SOCIAL_AUTH_FACEBOOK_SECRET = '05893ed4a038e05bab84bf9dce59c0fb'
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
-}
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER = 'registro@beautynow.mx'
@@ -221,18 +198,5 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST = 'beautynow.mx'
 EMAIL_PORT = 465
-
-DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SEND_CONFIRMATION_EMAIL': True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION': True,
-    'SERIALIZERS': {
-        'user_create': 'bn_app.serializers.UserCreateSerializer'
-    },
-}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
