@@ -143,6 +143,10 @@ class ServicePublicPriceAdmin(admin.ModelAdmin):
         'public_price',
     )
 
+    list_filter = (
+        'region',
+    )
+
     readonly_fields = (
         'service',
         'region',
@@ -170,6 +174,10 @@ class ServiceInternalCostAdmin(admin.ModelAdmin):
         'internal_cost',
     )
 
+    list_filter = (
+        'region',
+    )
+
     readonly_fields = (
         'service',
         'region',
@@ -195,6 +203,10 @@ class ServicePayoutAdmin(admin.ModelAdmin):
         'service',
         'region',
         'payout',
+    )
+
+    list_filter = (
+        'region',
     )
 
     readonly_fields = (
