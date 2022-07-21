@@ -113,9 +113,6 @@ class Service(models.Model):
     includes_eyelashes = models.BooleanField(default=False)
     availability = JSONField()
     duration = models.TimeField()
-    beautier_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    beauty_now_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    public_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     active = models.BooleanField(default=False)
     order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -193,6 +190,93 @@ class StaffLine(models.Model):
     pay_out = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class Region(models.Model):
+
+    class Meta:
+        verbose_name_plural = 'Regions'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['code', 'country_code', 'state_province_code'],
+                name='unique_region '
+            )
+        ]
+
+    code = models.CharField(max_length=4)
+    country_code = models.CharField(max_length=3)
+    state_province_code = models.CharField(max_length=3, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class ServiceRegion(models.Model):
+
+    class Meta:
+        abstract = True
+
+    service = models.ForeignKey('Service', on_delete=models.CASCADE)
+    region = models.ForeignKey('Region', on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class ServiceInternalCost(ServiceRegion):
+
+    class Meta:
+        verbose_name_plural = 'Service Internal Costs'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['service', 'region'],
+                name='unique_service_internal_cost'
+            )
+        ]
+
+    internal_cost = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class ServicePayout(ServiceRegion):
+
+    class Meta:
+        verbose_name_plural = 'Service Payouts'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['service', 'region'],
+                name='unique_service_payout'
+            )
+        ]
+
+    payout = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f'{self.__dict__}'
+
+
+class ServicePublicPrice(ServiceRegion):
+
+    class Meta:
+        verbose_name_plural = 'Service Public Prices'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['service', 'region'],
+                name='unique_service_public_price'
+            )
+        ]
+
+    public_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     def __str__(self):
         return f'{self.__dict__}'

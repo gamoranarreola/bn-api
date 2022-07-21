@@ -6,6 +6,8 @@ from .models import (
     CustomerProfile,
     CustomerProfileAddress,
     BeautierProfile,
+    Region,
+    ServicePublicPrice,
     Specialty,
     ServiceCategory,
     Service,
@@ -141,13 +143,14 @@ class ServiceCategorySerializer(serializers.ModelSerializer):
 
     def get_services(self, instance):
         services = instance.services.filter(active=True).order_by('order')
-        return ServiceSerializer(services, many=True).data
+        return ServiceSerializer(services, many=True, context=self.context).data
 
 
 class ServiceSerializer(serializers.ModelSerializer):
 
     specialties = SpecialtySerializer(many=True, read_only=True)
     description = serializers.CharField(allow_blank=True)
+    public_price = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -161,11 +164,24 @@ class ServiceSerializer(serializers.ModelSerializer):
             'includes_eyelashes',
             'availability',
             'duration',
-            'public_price',
             'specialties',
             'active',
             'order',
+            'public_price',
         ]
+
+    def get_public_price(self, instance):
+
+        region_split = self.context.get('region').split('-')
+
+        return ServicePublicPrice.objects.get(
+            region_id=Region.objects.get(
+                code=region_split[0],
+                state_province_code=region_split[1],
+                country_code=region_split[2]
+            ).id,
+            service_id=instance.id
+        ).public_price
 
 
 class BeautierProfileSerializer(serializers.ModelSerializer):

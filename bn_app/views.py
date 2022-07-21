@@ -175,8 +175,18 @@ def service_categories(request):
 
     try:
 
-        serviceCategories = ServiceCategory.objects.filter(active=True, order__gte=1).order_by('order')
-        serializer = ServiceCategorySerializer(serviceCategories, many=True)
+        serviceCategories = ServiceCategory.objects.filter(
+            active=True,
+            order__gte=1
+        ).order_by('order')
+
+        serializer = ServiceCategorySerializer(
+            serviceCategories,
+            many=True,
+            context={
+                'region': request.query_params.get('region')
+            }
+        )
 
         return response_200(serializer.data)
 
@@ -341,7 +351,6 @@ def handle_payment(request):
 
 
 @ api_view(http_method_names=['GET', 'POST'])
-@ permission_classes([IsAuthenticated])
 def work_orders(request):
 
     try:
@@ -404,7 +413,6 @@ def work_orders(request):
 
 
 @ api_view(http_method_names=['POST'])
-@ permission_classes([IsAuthenticated])
 def get_formatted_address(request):
 
     google_maps_client = googlemaps.Client(key='AIzaSyAP1kEvf4GgsAVLzI2MLGKpi1w17nmNDTQ')

@@ -51,8 +51,7 @@ else:
 
     CORS_ORIGIN_WHITELIST = [
         'https://localhost:8100',
-        'http://localhost:4200',
-        'https://localhost:4200',
+        'http://localhost:8100',
     ]
 
 # Application definition
