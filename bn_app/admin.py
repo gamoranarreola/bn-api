@@ -1,7 +1,7 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
 
-from .models import AuthUser, BeautierProfile, CustomerProfile, Service, ServiceCategory
+from .models import AuthUser, BeautierProfile, CustomerProfile, Region, Service, ServiceCategory, ServiceInternalCost, ServicePayout, ServicePublicPrice
 from .forms import AuthUserCreationForm, AuthUserChangeForm
 
 
@@ -113,8 +113,115 @@ class BeautierProfileAdmin(admin.ModelAdmin):
     )
 
 
+class RegionAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'code',
+        'state_province_code',
+        'country_code',
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'code',
+                    'state_province_code',
+                    'country_code',
+                )
+            }
+        ),
+    )
+
+
+class ServicePublicPriceAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'service',
+        'region',
+        'public_price',
+    )
+
+    readonly_fields = (
+        'service',
+        'region',
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'service',
+                    'region',
+                    'public_price',
+                )
+            }
+        ),
+    )
+
+
+class ServiceInternalCostAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'service',
+        'region',
+        'internal_cost',
+    )
+
+    readonly_fields = (
+        'service',
+        'region',
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'service',
+                    'region',
+                    'internal_cost',
+                )
+            }
+        ),
+    )
+
+
+class ServicePayoutAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'service',
+        'region',
+        'payout',
+    )
+
+    readonly_fields = (
+        'service',
+        'region',
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'service',
+                    'region',
+                    'payout',
+                )
+            }
+        ),
+    )
+
+
 admin.site.register(AuthUser, AuthUserAdmin)
 admin.site.register(CustomerProfile, CustomerProfileAdmin)
 admin.site.register(ServiceCategory)
 admin.site.register(Service)
+admin.site.register(Region, RegionAdmin)
+admin.site.register(ServicePublicPrice, ServicePublicPriceAdmin)
+admin.site.register(ServiceInternalCost, ServiceInternalCostAdmin)
+admin.site.register(ServicePayout, ServicePayoutAdmin)
 admin.site.register(BeautierProfile, BeautierProfileAdmin)

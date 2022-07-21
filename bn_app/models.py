@@ -214,7 +214,7 @@ class Region(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.__dict__}'
+        return f'{self.code}-{self.state_province_code}-{self.country_code}'
 
 
 class ServiceRegion(models.Model):
@@ -279,4 +279,4 @@ class ServicePublicPrice(ServiceRegion):
     public_price = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     def __str__(self):
-        return f'{self.__dict__}'
+        return f'{self.service} {self.region}'
