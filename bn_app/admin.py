@@ -119,6 +119,7 @@ class RegionAdmin(admin.ModelAdmin):
         'code',
         'state_province_code',
         'country_code',
+        'display_name',
     )
 
     fieldsets = (
@@ -129,6 +130,7 @@ class RegionAdmin(admin.ModelAdmin):
                     'code',
                     'state_province_code',
                     'country_code',
+                    'display_name',
                 )
             }
         ),

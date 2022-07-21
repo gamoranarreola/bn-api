@@ -203,13 +203,14 @@ class Region(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['code', 'country_code', 'state_province_code'],
-                name='unique_region '
+                name='unique_region'
             )
         ]
 
     code = models.CharField(max_length=4)
     country_code = models.CharField(max_length=3)
     state_province_code = models.CharField(max_length=3, null=True, blank=True)
+    display_name = models.CharField(max_length=32, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
