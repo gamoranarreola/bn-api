@@ -184,6 +184,19 @@ class ServiceSerializer(serializers.ModelSerializer):
         ).public_price
 
 
+class RegionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Region
+
+        fields = [
+            'display_name',
+            'code',
+            'state_province_code',
+            'country_code',
+        ]
+
 class BeautierProfileSerializer(serializers.ModelSerializer):
 
     auth_user = AuthUserSerializer()

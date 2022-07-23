@@ -21,6 +21,7 @@ from .serializers import (
     LineItemSerializer,
     MeSerializer,
     BeautierProfileSerializer,
+    RegionSerializer,
     ServiceSerializer,
     ServiceCategorySerializer,
     StaffAssigmentSerializer,
@@ -31,6 +32,7 @@ from .serializers import (
 from .models import (
     AuthUser,
     BeautierProfile,
+    Region,
     Service,
     ServiceCategory,
     CustomerProfile,
@@ -421,6 +423,19 @@ def get_formatted_address(request):
 
         response = google_maps_client.place(request.data['place_id'])
         return response_200(response['result']['formatted_address'])
+
+    except Exception as err:
+        return response_500(err)
+
+
+@api_view(http_method_names=['GET'])
+def get_regions(request):
+
+    try:
+        regions = Region.objects.filter(country_code=os.getenv('BN_REGION_COUNTRY_CODE', 'MEX'))
+        serializer = RegionSerializer(regions, many=True)
+
+        return response_200(serializer.data)
 
     except Exception as err:
         return response_500(err)

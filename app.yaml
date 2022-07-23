@@ -10,3 +10,4 @@ handlers:
 env_variables:
   GOOGLE_CLOUD_PROJECT: 'beauty-now-313716'
   USE_CLOUD_SQL_AUTH_PROXY: 'true'
+  BN_REGION_COUNTRY_CODE: 'MEX'
