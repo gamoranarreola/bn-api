@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import googlemaps
 from google.cloud import storage
 import conekta
 
@@ -19,10 +18,8 @@ from bn_utils.responses.generic_responses import (
 from .serializers import (
     CustomerProfileSerializer,
     LineItemSerializer,
-    MeSerializer,
     BeautierProfileSerializer,
     RegionSerializer,
-    ServiceSerializer,
     ServiceCategorySerializer,
     StaffAssigmentSerializer,
     StaffLineSerializer,
@@ -72,21 +69,6 @@ class UserActivationView(APIView):
 
 
 @api_view(http_method_names=['GET'])
-@permission_classes([IsAuthenticated])
-def me(request):
-
-    try:
-
-        auth_user = AuthUser.objects.get(pk=request.user.id)
-        serializer = MeSerializer(auth_user, many=False)
-
-        return response_200(serializer.data)
-
-    except Exception as err:
-        return response_500(err)
-
-
-@api_view(http_method_names=['GET'])
 def beautiers(request):
 
     try:
@@ -111,62 +93,6 @@ def beautier_work(request, pk):
             urls.append(blob.public_url)
 
         return response_200(urls)
-
-    except Exception as err:
-        return response_500(err)
-
-
-@api_view(http_method_names=['GET'])
-def beautier_by_id(request, pk):
-
-    try:
-
-        beautier = BeautierProfile.objects.get(pk=pk)
-        serializer = BeautierProfileSerializer(beautier, many=False)
-
-        return response_200(serializer.data)
-
-    except Exception as err:
-        return response_500(err)
-
-
-@api_view(http_method_names=['POST'])
-def beautiers_for_specialties(request):
-
-    try:
-
-        beautiers_for_specialties = BeautierProfile.objects.filter(specialties__in=request.data['specialty_ids']).distinct()
-        serializer = BeautierProfileSerializer(beautiers_for_specialties, many=True)
-
-        return response_200(serializer.data)
-
-    except Exception as err:
-        return response_500(err)
-
-
-@api_view(http_method_names=['GET'])
-def service_by_id(request, pk):
-
-    try:
-
-        service = Service.objects.get(pk=pk)
-        serializer = ServiceSerializer(service, many=False)
-
-        return response_200(serializer.data)
-
-    except Exception as err:
-        return response_500(err)
-
-
-@api_view(http_method_names=['GET'])
-def service_by_category_id(request, service_category_id):
-
-    try:
-
-        services = Service.objects.filter(category_id=service_category_id)
-        serializer = ServiceSerializer(services, many=True)
-
-        return response_200(serializer.data)
 
     except Exception as err:
         return response_500(err)
@@ -352,7 +278,7 @@ def handle_payment(request):
         return response_500(err)
 
 
-@ api_view(http_method_names=['GET', 'POST'])
+@api_view(http_method_names=['GET', 'POST'])
 def work_orders(request):
 
     try:
@@ -414,20 +340,6 @@ def work_orders(request):
         return response_500(err)
 
 
-@ api_view(http_method_names=['POST'])
-def get_formatted_address(request):
-
-    google_maps_client = googlemaps.Client(key='AIzaSyAP1kEvf4GgsAVLzI2MLGKpi1w17nmNDTQ')
-
-    try:
-
-        response = google_maps_client.place(request.data['place_id'])
-        return response_200(response['result']['formatted_address'])
-
-    except Exception as err:
-        return response_500(err)
-
-
 @api_view(http_method_names=['GET'])
 def get_regions(request):
 
@@ -446,8 +358,8 @@ ADMIN ENDPOINTS
 """
 
 
-@ api_view(http_method_names=['GET'])
-@ permission_classes([IsAuthenticated, IsAdminUser])
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def admin_customer_profiles(request):
 
     try:
@@ -460,8 +372,8 @@ def admin_customer_profiles(request):
         return response_500(err)
 
 
-@ api_view(http_method_names=['GET'])
-@ permission_classes([IsAuthenticated, IsAdminUser])
+@api_view(http_method_names=['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def admin_work_orders(request):
 
     try:
@@ -475,8 +387,8 @@ def admin_work_orders(request):
         return response_500(err)
 
 
-@ api_view(http_method_names=['POST'])
-@ permission_classes([IsAuthenticated, IsAdminUser])
+@api_view(http_method_names=['POST'])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def admin_staff_assignments(request):
 
     try:
@@ -494,8 +406,8 @@ def admin_staff_assignments(request):
         return response_500(err)
 
 
-@ api_view(http_method_names=['POST', 'DELETE', 'PATCH'])
-@ permission_classes([IsAuthenticated, IsAdminUser])
+@api_view(http_method_names=['POST', 'DELETE', 'PATCH'])
+@permission_classes([IsAuthenticated, IsAdminUser])
 def admin_staff_lines(request, pk=None):
 
     try:

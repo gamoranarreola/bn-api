@@ -61,19 +61,6 @@ class UserCreateSerializer():
         return user
 
 
-class MeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AuthUser
-
-        fields = [
-            'first_name',
-            'last_name',
-            'email',
-            'phone'
-        ]
-
-
 class AuthUserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -196,6 +183,7 @@ class RegionSerializer(serializers.ModelSerializer):
             'state_province_code',
             'country_code',
         ]
+
 
 class BeautierProfileSerializer(serializers.ModelSerializer):
 
