@@ -35,6 +35,7 @@ def seed_auth_users(apps, schema_editor):
         customer_profile.save()
         print(f'CUSTOMER PROFILE: {customer_profile}\n')
 
+
 def seed_beautiers(apps, schema_editor):
 
     auth_user_model = apps.get_model('bn_app', 'AuthUser')
@@ -165,5 +166,5 @@ class Migration(migrations.Migration):
         migrations.RunPython(seed_specialties),
         migrations.RunPython(seed_beautier_profile_specialties),
         migrations.RunPython(seed_service_categories),
-        migrations.RunPython(seed_services)
+        migrations.RunPython(seed_services),
     ]
