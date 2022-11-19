@@ -54,3 +54,8 @@ DROP TABLE IF EXISTS bn_app_lineitem_staff_assignments CASCADE;
 DROP TABLE IF EXISTS bn_app_staffassignment CASCADE;
 DROP TABLE IF EXISTS bn_app_staffassignment_staff_lines CASCADE;
 DROP TABLE IF EXISTS bn_app_staffline CASCADE;
+
+DROP TABLE IF EXISTS bn_app_region CASCADE;
+DROP TABLE IF EXISTS bn_app_serviceinternalcost CASCADE;
+DROP TABLE IF EXISTS bn_app_servicepayout CASCADE;
+DROP TABLE IF EXISTS bn_app_servicepublicprice CASCADE;

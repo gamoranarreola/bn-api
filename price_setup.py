@@ -1,17 +1,12 @@
 import os
+
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bn_core.settings')
 django.setup()
 
-from bn_app.models import (
-    Region,
-    Service,
-    ServiceInternalCost,
-    ServicePayout,
-    ServicePublicPrice
-)
-
+from bn_app.models import (Region, Service, ServiceInternalCost, ServicePayout,
+                           ServicePublicPrice)
 
 source_region: str = ''
 target_region: str = ''

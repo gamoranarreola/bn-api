@@ -11,16 +11,12 @@ def create_regions(apps, schema_editor):
         - BC
         - MEX
     """
-    region_model = apps.get_model('bn_app', 'Region')
+    region_model = apps.get_model("bn_app", "Region")
 
-    region = region_model(
-        code='TIJ',
-        state_province_code='BC',
-        country_code='MEX'
-    )
+    region = region_model(code="TIJ", state_province_code="BC", country_code="MEX")
 
     region.save()
-    print(f'REGION: {region}\n')
+    print(f"REGION: {region}\n")
 
 
 def migrate_prices(apps, schema_editor):
@@ -35,47 +31,45 @@ def migrate_prices(apps, schema_editor):
     For beauty_now_price create record in the serviceinternalcost model
     For public_price create record in the servicepublicprice model
     """
-    service_model = apps.get_model('bn_app', 'Service')
-    region_model = apps.get_model('bn_app', 'Region')
-    internal_cost_model = apps.get_model('bn_app', 'ServiceInternalCost')
-    service_payout_model = apps.get_model('bn_app', 'ServicePayout')
-    public_price_model = apps.get_model('bn_app', 'ServicePublicPrice')
-    region = region_model.objects.get(code='TIJ')
+    service_model = apps.get_model("bn_app", "Service")
+    region_model = apps.get_model("bn_app", "Region")
+    internal_cost_model = apps.get_model("bn_app", "ServiceInternalCost")
+    service_payout_model = apps.get_model("bn_app", "ServicePayout")
+    public_price_model = apps.get_model("bn_app", "ServicePublicPrice")
+    region = region_model.objects.get(code="TIJ")
 
     for service in service_model.objects.all():
 
         internal_cost = internal_cost_model(
             service_id=service.id,
             region_id=region.id,
-            internal_cost=service.beauty_now_price
+            internal_cost=service.beauty_now_price,
         )
 
         internal_cost.save()
-        print(f'INTERNAL COST: {internal_cost}\n')
+        print(f"INTERNAL COST: {internal_cost}\n")
 
         service_payout = service_payout_model(
-            service_id=service.id,
-            region_id=region.id,
-            payout=service.beautier_price
+            service_id=service.id, region_id=region.id, payout=service.beautier_price
         )
 
         service_payout.save()
-        print(f'SERVICE PAYOUT: {service_payout}\n')
+        print(f"SERVICE PAYOUT: {service_payout}\n")
 
         public_price = public_price_model(
             service_id=service.id,
             region_id=region.id,
-            public_price=service.public_price
+            public_price=service.public_price,
         )
 
         public_price.save()
-        print(f'PUBLIC PRICE: {public_price}\n')
+        print(f"PUBLIC PRICE: {public_price}\n")
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bn_app', '0011_serviceinternalcost_unique_service_internal_cost_and_more'),
+        ("bn_app", "0011_serviceinternalcost_unique_service_internal_cost_and_more"),
     ]
 
     operations = [

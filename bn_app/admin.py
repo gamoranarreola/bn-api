@@ -1,8 +1,18 @@
-from django.contrib.auth.admin import UserAdmin
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
-from .models import AuthUser, BeautierProfile, CustomerProfile, Region, Service, ServiceCategory, ServiceInternalCost, ServicePayout, ServicePublicPrice
-from .forms import AuthUserCreationForm, AuthUserChangeForm
+from .forms import AuthUserChangeForm, AuthUserCreationForm
+from .models import (
+    AuthUser,
+    BeautierProfile,
+    CustomerProfile,
+    Region,
+    Service,
+    ServiceCategory,
+    ServiceInternalCost,
+    ServicePayout,
+    ServicePublicPrice,
+)
 
 
 class AuthUserAdmin(UserAdmin):
@@ -12,40 +22,34 @@ class AuthUserAdmin(UserAdmin):
     model = AuthUser
 
     list_display = (
-        'id',
-        'email',
-        'last_name',
-        'first_name',
-        'is_staff',
-        'is_active',
+        "id",
+        "email",
+        "last_name",
+        "first_name",
+        "is_staff",
+        "is_active",
     )
 
-    list_filter = (
-        'email',
-        'last_name',
-        'first_name',
-        'is_staff',
-        'is_active'
-    )
+    list_filter = ("email", "last_name", "first_name", "is_staff", "is_active")
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'email',
-                    'first_name',
-                    'last_name',
-                    'password',
+                "fields": (
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password",
                 ),
             },
         ),
         (
-            'Permissions',
+            "Permissions",
             {
-                'fields': (
-                    'is_staff',
-                    'is_active',
+                "fields": (
+                    "is_staff",
+                    "is_active",
                 ),
             },
         ),
@@ -55,58 +59,53 @@ class AuthUserAdmin(UserAdmin):
         (
             None,
             {
-                'classes': (
-                    'wide',
-                ),
-                'fields': (
-                    'email',
-                    'first_name',
-                    'last_name',
-                    'password1',
-                    'password2',
-                    'is_staff',
-                    'is_active',
+                "classes": ("wide",),
+                "fields": (
+                    "email",
+                    "first_name",
+                    "last_name",
+                    "password1",
+                    "password2",
+                    "is_staff",
+                    "is_active",
                 ),
             },
         ),
     )
 
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ("email",)
+    ordering = ("email",)
 
 
 class CustomerProfileAdmin(admin.ModelAdmin):
 
-    list_display = (
-        'auth_user',
-        'customer_profile_id'
-    )
+    list_display = ("auth_user", "customer_profile_id")
 
     readonly_fields = (
-        'auth_user',
-        'customer_profile_id',
+        "auth_user",
+        "customer_profile_id",
     )
 
 
 class BeautierProfileAdmin(admin.ModelAdmin):
 
     list_display = (
-        'auth_user',
-        'calendar_id',
+        "auth_user",
+        "calendar_id",
     )
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'auth_user',
-                    'preferred_name',
-                    'title',
-                    'specialties',
-                    'bio',
-                    'photo_url',
-                    'phone',
+                "fields": (
+                    "auth_user",
+                    "preferred_name",
+                    "title",
+                    "specialties",
+                    "bio",
+                    "photo_url",
+                    "phone",
                 )
             },
         ),
@@ -116,23 +115,23 @@ class BeautierProfileAdmin(admin.ModelAdmin):
 class RegionAdmin(admin.ModelAdmin):
 
     list_display = (
-        'code',
-        'state_province_code',
-        'country_code',
-        'display_name',
+        "code",
+        "state_province_code",
+        "country_code",
+        "display_name",
     )
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'code',
-                    'state_province_code',
-                    'country_code',
-                    'display_name',
+                "fields": (
+                    "code",
+                    "state_province_code",
+                    "country_code",
+                    "display_name",
                 )
-            }
+            },
         ),
     )
 
@@ -140,30 +139,28 @@ class RegionAdmin(admin.ModelAdmin):
 class ServicePublicPriceAdmin(admin.ModelAdmin):
 
     list_display = (
-        'service',
-        'region',
-        'public_price',
+        "service",
+        "region",
+        "public_price",
     )
 
-    list_filter = (
-        'region',
-    )
+    list_filter = ("region",)
 
     readonly_fields = (
-        'service',
-        'region',
+        "service",
+        "region",
     )
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'service',
-                    'region',
-                    'public_price',
+                "fields": (
+                    "service",
+                    "region",
+                    "public_price",
                 )
-            }
+            },
         ),
     )
 
@@ -171,30 +168,28 @@ class ServicePublicPriceAdmin(admin.ModelAdmin):
 class ServiceInternalCostAdmin(admin.ModelAdmin):
 
     list_display = (
-        'service',
-        'region',
-        'internal_cost',
+        "service",
+        "region",
+        "internal_cost",
     )
 
-    list_filter = (
-        'region',
-    )
+    list_filter = ("region",)
 
     readonly_fields = (
-        'service',
-        'region',
+        "service",
+        "region",
     )
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'service',
-                    'region',
-                    'internal_cost',
+                "fields": (
+                    "service",
+                    "region",
+                    "internal_cost",
                 )
-            }
+            },
         ),
     )
 
@@ -202,30 +197,28 @@ class ServiceInternalCostAdmin(admin.ModelAdmin):
 class ServicePayoutAdmin(admin.ModelAdmin):
 
     list_display = (
-        'service',
-        'region',
-        'payout',
+        "service",
+        "region",
+        "payout",
     )
 
-    list_filter = (
-        'region',
-    )
+    list_filter = ("region",)
 
     readonly_fields = (
-        'service',
-        'region',
+        "service",
+        "region",
     )
 
     fieldsets = (
         (
             None,
             {
-                'fields': (
-                    'service',
-                    'region',
-                    'payout',
+                "fields": (
+                    "service",
+                    "region",
+                    "payout",
                 )
-            }
+            },
         ),
     )
 

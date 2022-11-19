@@ -6,20 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bn_app', '0010_region_servicepublicprice_servicepayout_and_more'),
+        ("bn_app", "0010_region_servicepublicprice_servicepayout_and_more"),
     ]
 
     operations = [
         migrations.AddConstraint(
-            model_name='serviceinternalcost',
-            constraint=models.UniqueConstraint(fields=('service', 'region'), name='unique_service_internal_cost'),
+            model_name="serviceinternalcost",
+            constraint=models.UniqueConstraint(
+                fields=("service", "region"), name="unique_service_internal_cost"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='servicepayout',
-            constraint=models.UniqueConstraint(fields=('service', 'region'), name='unique_service_payout'),
+            model_name="servicepayout",
+            constraint=models.UniqueConstraint(
+                fields=("service", "region"), name="unique_service_payout"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='servicepublicprice',
-            constraint=models.UniqueConstraint(fields=('service', 'region'), name='unique_service_public_price'),
+            model_name="servicepublicprice",
+            constraint=models.UniqueConstraint(
+                fields=("service", "region"), name="unique_service_public_price"
+            ),
         ),
     ]

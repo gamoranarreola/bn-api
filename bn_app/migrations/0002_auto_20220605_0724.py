@@ -6,50 +6,50 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bn_app', '0001_initial'),
+        ("bn_app", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='authuser',
-            options={'verbose_name_plural': 'Auth Users'},
+            name="authuser",
+            options={"verbose_name_plural": "Auth Users"},
         ),
         migrations.AlterModelOptions(
-            name='beautierprofile',
-            options={'verbose_name_plural': 'Beautier Profiles'},
+            name="beautierprofile",
+            options={"verbose_name_plural": "Beautier Profiles"},
         ),
         migrations.AlterModelOptions(
-            name='customerprofile',
-            options={'verbose_name_plural': 'Customer Profiles'},
+            name="customerprofile",
+            options={"verbose_name_plural": "Customer Profiles"},
         ),
         migrations.AlterModelOptions(
-            name='customerprofileaddress',
-            options={'verbose_name_plural': 'Customer Profile Addresses'},
+            name="customerprofileaddress",
+            options={"verbose_name_plural": "Customer Profile Addresses"},
         ),
         migrations.AlterModelOptions(
-            name='lineitem',
-            options={'verbose_name_plural': 'Line Items'},
+            name="lineitem",
+            options={"verbose_name_plural": "Line Items"},
         ),
         migrations.AlterModelOptions(
-            name='staffassignment',
-            options={'verbose_name_plural': 'Staff Assignments'},
+            name="staffassignment",
+            options={"verbose_name_plural": "Staff Assignments"},
         ),
         migrations.AlterModelOptions(
-            name='staffline',
-            options={'verbose_name_plural': 'Staff Lines'},
+            name="staffline",
+            options={"verbose_name_plural": "Staff Lines"},
         ),
         migrations.AlterModelOptions(
-            name='workorder',
-            options={'verbose_name_plural': 'Work Orders'},
+            name="workorder",
+            options={"verbose_name_plural": "Work Orders"},
         ),
         migrations.AddField(
-            model_name='beautierprofile',
-            name='bio',
+            model_name="beautierprofile",
+            name="bio",
             field=models.TextField(blank=True, max_length=1024),
         ),
         migrations.AddField(
-            model_name='beautierprofile',
-            name='photo_url',
+            model_name="beautierprofile",
+            name="photo_url",
             field=models.URLField(blank=True, max_length=256),
         ),
     ]

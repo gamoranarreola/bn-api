@@ -1,30 +1,31 @@
-from bn_app.serializers import StaffAssigmentSerializer
+import pytest
 
 from bn_app.models import (
-    Service,
-    ServiceCategory,
-    WorkOrder,
     AuthUser,
+    BeautierProfile,
     CustomerProfile,
     LineItem,
+    Service,
+    ServiceCategory,
     StaffAssignment,
-    BeautierProfile)
-
-import pytest
+    WorkOrder,
+)
+from bn_app.serializers import StaffAssigmentSerializer
 
 
 @pytest.fixture
 def test_password():
-    return '5tr0ngp@55w0rd'
+    return "5tr0ngp@55w0rd"
 
 
 @pytest.fixture
 def create_user(db, django_user_model, test_password):
     def make_user(**kwargs):
-        kwargs['password'] = test_password
-        if 'email' not in kwargs:
-            kwargs['email'] = 'test_user@test.com'
+        kwargs["password"] = test_password
+        if "email" not in kwargs:
+            kwargs["email"] = "test_user@test.com"
         return django_user_model.objects.create_user(**kwargs)
+
     return make_user
 
 
@@ -35,12 +36,14 @@ def auto_login_user(db, client, create_user, test_password):
             user = create_user()
         client.login(username=user.email, password=test_password)
         return client, user
+
     return make_auto_login
 
 
 @pytest.fixture
 def api_client():
     from rest_framework.test import APIClient
+
     return APIClient()
 
 
@@ -58,18 +61,19 @@ def create_service():
         service_category = ServiceCategory.objects.create(name="Maquillaje")
 
         service = Service.objects.create(
-            service_id='MQ-SOC-DN',
+            service_id="MQ-SOC-DN",
             category=service_category,
-            name='Maquillaje Social Dia o Noche',
+            name="Maquillaje Social Dia o Noche",
             includes_eyelashes=True,
             availability={},
-            duration='01:00',
+            duration="01:00",
             beautier_price=510,
             beauty_now_price=795,
-            public_price=860
+            public_price=860,
         )
 
         return service
+
     return make_service
 
 
@@ -79,41 +83,46 @@ def create_work_order(create_service):
         service = create_service()
 
         work_order = WorkOrder.objects.create(
-            request_date='2020-09-01',
-            request_time='06:00 AM',
-            place_id='e7e0a378-323f-43c6-8029-39b60599a919',
-            customer_profile_id=CustomerProfile.objects.get(auth_user=AuthUser.objects.get(email='test_user@test.com')).id,
-            notes='Some notes',
-            status='initial_request'
+            request_date="2020-09-01",
+            request_time="06:00 AM",
+            place_id="e7e0a378-323f-43c6-8029-39b60599a919",
+            customer_profile_id=CustomerProfile.objects.get(
+                auth_user=AuthUser.objects.get(email="test_user@test.com")
+            ).id,
+            notes="Some notes",
+            status="initial_request",
         )
 
         line_items = [
             {
-                'service': service.id,
-                'service_date': '2020-09-02',
-                'service_time': '09:00 AM',
-                'quantity': 3,
-                'price': 800
+                "service": service.id,
+                "service_date": "2020-09-02",
+                "service_time": "09:00 AM",
+                "quantity": 3,
+                "price": 800,
             },
             {
-                'service': service.id,
-                'service_date': '2020-09-02',
-                'service_time': '09:30 AM',
-                'quantity': 2,
-                'price': 800
-            }
+                "service": service.id,
+                "service_date": "2020-09-02",
+                "service_time": "09:30 AM",
+                "quantity": 2,
+                "price": 800,
+            },
         ]
 
         for line_item in line_items:
-            work_order.line_items.add(LineItem.objects.create(
-                service=Service.objects.get(pk=line_item['service']),
-                service_date=line_item['service_date'],
-                service_time=line_item['service_time'],
-                quantity=line_item['quantity'],
-                price=line_item['price']
-            ))
+            work_order.line_items.add(
+                LineItem.objects.create(
+                    service=Service.objects.get(pk=line_item["service"]),
+                    service_date=line_item["service_date"],
+                    service_time=line_item["service_time"],
+                    quantity=line_item["quantity"],
+                    price=line_item["price"],
+                )
+            )
 
         return work_order
+
     return make_work_order
 
 
@@ -127,14 +136,14 @@ def create_staffing_assignments(create_work_order):
 
             for i in range(1, line_item.quantity + 1):
 
-                staffing_assignment = StaffAssigmentSerializer(StaffingAssignment.objects.create(
-                    line_item=line_item,
-                    index=i
-                ))
+                staffing_assignment = StaffAssigmentSerializer(
+                    StaffingAssignment.objects.create(line_item=line_item, index=i)
+                )
 
                 staffing_assignments.append(staffing_assignment.data)
 
         return staffing_assignments
+
     return make_staffing_assignment
 
 
@@ -142,8 +151,9 @@ def create_staffing_assignments(create_work_order):
 def create_beautier():
     def make_beautier():
         beautier = BeautierProfile.objects.create(
-            auth_user=AuthUser.objects.get(email='test_user@test.com')
+            auth_user=AuthUser.objects.get(email="test_user@test.com")
         )
 
         return beautier
+
     return make_beautier
