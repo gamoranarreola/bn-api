@@ -6,11 +6,8 @@ from bn_app.models import (
     CustomerProfile,
     LineItem,
     Service,
-    ServiceCategory,
-    StaffAssignment,
     WorkOrder,
 )
-from bn_app.serializers import StaffAssigmentSerializer
 
 
 @pytest.fixture
@@ -58,18 +55,13 @@ def api_client_with_credentials(db, create_user, api_client):
 @pytest.fixture
 def create_service():
     def make_service():
-        service_category = ServiceCategory.objects.create(name="Maquillaje")
 
         service = Service.objects.create(
             service_id="MQ-SOC-DN",
-            category=service_category,
             name="Maquillaje Social Dia o Noche",
             includes_eyelashes=True,
             availability={},
-            duration="01:00",
-            beautier_price=510,
-            beauty_now_price=795,
-            public_price=860,
+            duration="01:00"
         )
 
         return service
@@ -124,27 +116,6 @@ def create_work_order(create_service):
         return work_order
 
     return make_work_order
-
-
-@pytest.fixture
-def create_staffing_assignments(create_work_order):
-    def make_staffing_assignment():
-        work_order = create_work_order()
-        staffing_assignments = []
-
-        for line_item in work_order.line_items.all():
-
-            for i in range(1, line_item.quantity + 1):
-
-                staffing_assignment = StaffAssigmentSerializer(
-                    StaffingAssignment.objects.create(line_item=line_item, index=i)
-                )
-
-                staffing_assignments.append(staffing_assignment.data)
-
-        return staffing_assignments
-
-    return make_staffing_assignment
 
 
 @pytest.fixture
